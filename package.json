@@ -1,0 +1,17 @@
+{
+  "name": "rcc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "puppeteer": "^5.5.0",
+    "tld": "0.0.2",
+    "tld-extract": "^2.0.0",
+    "url": "^0.11.0"
+  }
+}

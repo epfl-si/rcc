@@ -6,8 +6,8 @@ import tld from 'tld-extract'
 const dataDir = 'data'
 
 type vURL = {
-  url: URL,
-  path: string,
+  url: URL
+  path: string
   file: string
 }
 
@@ -25,10 +25,11 @@ const validateURL = (link: string): vURL => {
   }
 }
 
-const screenshot = async (link: string) => {
+const screenshot = async (link: string, opts: any) => {
   const url = validateURL(link)
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox'], // one can specify the window size with --window-size=${1200},${900}
+    headless: true,
+    args: ['--no-sandbox', '--start-maximized', '--window-size=1200,900'], // defaut size is 800x600 and the "mobile" menu can be displayed
     defaultViewport: null,
   })
   const page = await browser.newPage()
@@ -40,17 +41,16 @@ const screenshot = async (link: string) => {
   let links = await page.$$eval('a', (as) => as.map((a: any) => a.href))
 
   // dedup and sort links
-  links = [ ...new Set(links)]
+  links = [...new Set(links)]
   links.sort()
 
   // loop over page's links
   for (const href of links) {
-
-    console.log(`\n${href}`)
-
     if (!href.startsWith('http')) {
       continue
     }
+
+    if (!opts.quiet) console.log(`\n${href}`)
     const currentURL = validateURL(href)
 
     try {
@@ -65,17 +65,22 @@ const screenshot = async (link: string) => {
         path: `${dataDir}/${currentURL.path}/${currentURL.file}.png`,
         fullPage: true,
       })
-      console.log(` ↳ Screenshot: file://${__dirname}/${dataDir}/${currentURL.path}/${currentURL.file}.png`)
+      if (!opts.quiet) {
+        console.log(
+          ` ↳ Screenshot: file://${__dirname}/${dataDir}/${currentURL.path}/${currentURL.file}.png`
+        )
+      }
       // PDF ? → await page.pdf({path: '${dataDir}/hn.pdf', format: 'A4'})
     } catch (e) {
       console.error(e)
+    }
+
+    if (opts.report) {
+      console.log('WIP - REPORT')
     }
   }
 
   await browser.close()
 }
 
-// exports.screenshot = screenshot
 export default screenshot
-
-// screenshot('https://some.link.com')

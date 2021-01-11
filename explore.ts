@@ -79,7 +79,7 @@ const explore = async (link: string, opts: any): Promise<report> => {
       continue
     }
 
-    if (opts.limit !== currentURL.info.domain) {
+    if (typeof opts.limit !== 'undefined' && opts.limit !== currentURL.info.domain) {
       if (!opts.quiet) console.log(`✖ ${href} excluded from defined limit: "${opts.limit}" (${currentURL.info.domain})`)
       report.total.excluded++
       continue

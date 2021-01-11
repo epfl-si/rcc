@@ -11,6 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "commander": "^6.2.1",
+    "performance": "^1.4.0",
     "puppeteer": "^5.5.0",
     "tld": "0.0.2",
     "tld-extract": "^2.0.0",

@@ -1,5 +1,14 @@
 import screenshot from './screenshot'
 import lecommander from 'commander'
+import { performance } from 'perf_hooks'
+
+const start = async () => {
+  const t0 = performance.now()
+  await screenshot(lecommander.url, lecommander.opts())
+  const t1 = performance.now()
+  const tet = ((t1 - t0) / 1000).toFixed(2)
+  console.log(`Total execution time ${tet} + " seconds.`)
+}
 
 lecommander.version(require('./package.json').version)
 lecommander
@@ -23,5 +32,4 @@ if (lecommander.url && !lecommander.quiet) {
 }
 
 if (lecommander.debug) console.log(lecommander.opts())
-
-screenshot(lecommander.url, lecommander.opts())
+start()

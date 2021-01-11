@@ -64,21 +64,21 @@ const screenshot = async (link: string, opts: any) => {
 
     try {
       await page.goto(currentURL.url.href, { waitUntil: 'networkidle2' }) // .catch(e => void 0)
+      if (opts.screenshot) {
+        // ensure the path exsists
+        fs.mkdir(`${dataDir}/${currentURL.path}`, { recursive: true }, err => {
+          if (err) throw err
+        })
 
-      // ensure the path exsists
-      fs.mkdir(`${dataDir}/${currentURL.path}`, { recursive: true }, err => {
-        if (err) throw err
-      })
+        await page.screenshot({
+          path: `${dataDir}/${currentURL.path}/${currentURL.file}.png`,
+          fullPage: true,
+        })
 
-      await page.screenshot({
-        path: `${dataDir}/${currentURL.path}/${currentURL.file}.png`,
-        fullPage: true,
-      })
-
-      if (!opts.quiet) {
-        console.log(`  ↳ Screenshot: file://${__dirname}/${dataDir}/${currentURL.path}/${currentURL.file}.png`)
+        if (!opts.quiet) {
+          console.log(`  ↳ Screenshot: file://${__dirname}/${dataDir}/${currentURL.path}/${currentURL.file}.png`)
+        }
       }
-      // PDF ? → await page.pdf({path: '${dataDir}/hn.pdf', format: 'A4'})
     } catch (e) {
       console.error(e)
     }

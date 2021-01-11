@@ -24,6 +24,7 @@ lecommander
   .description('An application that screenshot all pages from a starting URL')
   .option('-d, --debug', 'output extra debugging', false)
   .option('-l, --limit <domain>', 'limit to a specific domain')
+  .option('-ns, --no-screenshot', 'save screenshot of visited site')
   .option('-p, --performance <bool>', 'show performance data', true)
   .option('-q, --quiet', 'limit ouptut console', false)
   .option('-r, --report', 'output final report', false)

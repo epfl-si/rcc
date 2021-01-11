@@ -59,7 +59,9 @@ const explore = async (link: string, opts: any): Promise<report> => {
   links = [...new Set(links)]
   links.sort()
   report.total.links = links.length
-  console.log(report.total.links)
+  if (!opts.quiet) {
+    console.log(`Total links found: ${report.total.links}`)
+  }
 
   // loop over page's links
   for (const href of links) {
@@ -80,7 +82,7 @@ const explore = async (link: string, opts: any): Promise<report> => {
     }
 
     if (typeof opts.limit !== 'undefined' && opts.limit !== currentURL.info.domain) {
-      if (!opts.quiet) console.log(`✖ ${href} excluded from defined limit: "${opts.limit}" (${currentURL.info.domain})`)
+      if (!opts.quiet) console.log(`\n✖ ${href} excluded from defined limit: "${opts.limit}" (${currentURL.info.domain})`)
       report.total.excluded++
       continue
     }

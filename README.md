@@ -13,7 +13,7 @@ they will be cached in cloudflare service.
 
 ## Usage
 
-`npm start -- --url https://www.epfl.ch --limit epfl.ch`
+`npm start -- --url https://www.epfl.ch --limit epfl.ch --report --no-screenshot`
 
 ### Options
 

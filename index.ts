@@ -31,7 +31,7 @@ function primitiveToBoolean(value: string): boolean {
 lecommander.version(require('./package.json').version)
 lecommander
   .name('npm start -- ')
-  .usage('--url https://www.epfl.ch --limit epfl.ch')
+  .usage('--url https://www.epfl.ch --limit epfl.ch -d -r -ns')
   .description('An application that screenshot all pages from a starting URL')
   .option('-d, --debug', 'output extra debugging', false)
   .option('-l, --limit <domain>', 'limit to a specific domain')
@@ -50,7 +50,7 @@ if (!lecommander.url) {
 }
 
 if (lecommander.url && !lecommander.quiet) {
-  console.log(`Starting from: ${lecommander.url}`)
+  console.log(`Starting point: ${lecommander.url}`)
 }
 
 lecommander.performance = primitiveToBoolean(lecommander.performance)

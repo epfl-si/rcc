@@ -33,9 +33,9 @@ lecommander
   .name('npm start -- ')
   .usage('--url https://www.epfl.ch --limit epfl.ch -d -r -ns')
   .description('An application that screenshot all pages from a starting URL')
-  .option('-d, --debug', 'output extra debugging', false)
   .option('-l, --limit <domain>', 'limit to a specific domain')
   .option('-ns, --no-screenshot', 'save screenshot of visited site')
+  .option('-o, --dump-options', 'dump run time options', false)
   .option('-p, --performance <bool>', 'show performance data', true)
   .option('-q, --quiet', 'limit ouptut console', false)
   .option('-r, --report', 'output final report', false)
@@ -54,6 +54,6 @@ if (lecommander.url && !lecommander.quiet) {
 }
 
 lecommander.performance = primitiveToBoolean(lecommander.performance)
-if (lecommander.debug) console.log(lecommander.opts())
+if (lecommander.dumpOptions) console.log(lecommander.opts())
 
 start()

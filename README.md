@@ -19,9 +19,9 @@ they will be cached in cloudflare service.
 
 | arg   | full                      | description                     | default  |
 | ----- | ------------------------- | ------------------------------- | -------- |
-| `-d`  | `--debug`                 | output extra debugging          | false    |
 | `-l`  | `--limit <domain>`        | limit to a specific domain      | false    |
 | `-ns` | `--no-screenshot`         | save screenshot of visited site | false    |
+| `-o`  | `--dump-options`          | dump run time options           | false    |
 | `-p`  | `--performance`           | show performance data           | true     |
 | `-q`  | `--quiet`                 | limit ouptut console            | false    |
 | `-r`  | `--report`                | output final report             | false    |

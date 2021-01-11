@@ -9,6 +9,7 @@ type vURL = {
   url: URL
   path: string
   file: string
+  info: any
 }
 
 const validateURL = (link: string): vURL => {
@@ -22,6 +23,7 @@ const validateURL = (link: string): vURL => {
     url,
     path: `${urlInfo.tld}/${trimmedDomain}/${urlInfo.sub}`,
     file: fileName,
+    info: urlInfo,
   }
 }
 
@@ -50,8 +52,17 @@ const screenshot = async (link: string, opts: any) => {
       continue
     }
 
-    if (!opts.quiet) console.log(`\n${href}`)
     const currentURL = validateURL(href)
+
+    if (opts.limit !== currentURL.info.domain) {
+      if (!opts.quiet)
+        console.log(
+          `✖ ${href} excluded from defined limit: "${opts.limit}" (${currentURL.info.domain})`
+        )
+      continue
+    }
+
+    if (!opts.quiet) console.log(`\n✓ ${href}`)
 
     try {
       await page.goto(currentURL.url.href, { waitUntil: 'networkidle2' }) // .catch(e => void 0)
@@ -67,7 +78,7 @@ const screenshot = async (link: string, opts: any) => {
       })
       if (!opts.quiet) {
         console.log(
-          ` ↳ Screenshot: file://${__dirname}/${dataDir}/${currentURL.path}/${currentURL.file}.png`
+          `  ↳ Screenshot: file://${__dirname}/${dataDir}/${currentURL.path}/${currentURL.file}.png`
         )
       }
       // PDF ? → await page.pdf({path: '${dataDir}/hn.pdf', format: 'A4'})

@@ -13,17 +13,20 @@ they will be cached in cloudflare service.
 
 ## Usage
 
-`npm start -- --url https://www.epfl.ch`
+`npm start -- --url https://www.epfl.ch --limit epfl.ch`
 
 ### Options
 
-| arg | full          | description            | default  |
-| --- | ------------- | ---------------------- | -------- |
-| `-d`| `--debug`     | output extra debugging | false    |
-| `-q`| `--quiet`     | limit ouptut console   | false    |
-| `-r`| `--report`    | output final report    | false    |
-| `-u`| `--url <url>` | `url` to start with    | required |
+| arg | full               | description                | default  |
+| --- | ------------------ | -------------------------- | -------- |
+| `-d`| `--debug`          | output extra debugging     | false    |
+| `-l`| `--limit <domain>` | limit to a specific domain | false    |
+| `-q`| `--quiet`          | limit ouptut console       | false    |
+| `-r`| `--report`         | output final report        | false    |
+| `-u`| `--url <url>`      | `url` to start with        | required |
 
 ## ToDos
 - [ ] add a timer (per site + total)
 - [ ] add a report after exectution (num of screenshots, error, ...)
+- [x] add a limit on domain
+- [ ] add screenshot option

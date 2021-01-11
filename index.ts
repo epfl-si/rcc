@@ -41,7 +41,7 @@ lecommander
   .option('-r, --report', 'output final report', false)
   .option('-t, --timeout <timeout>', 'set timeout in milliseconds', '30000')
   .option('-u, --url <url>', '`url` to start with')
-  .option('-ua, --useragent <useragent>','set useragent')
+  .option('-ua, --useragent <useragent>', 'set useragent')
 
 lecommander.parse(process.argv)
 

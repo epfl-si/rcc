@@ -40,13 +40,13 @@ const explore = async (link: string, opts: any): Promise<report> => {
   const page = await browser.newPage()
 
   if (opts.useragent) {
-    const userAgent = await page.evaluate(() => navigator.userAgent );
-    await page.setUserAgent(`${userAgent} ${opts.useragent}`);  
+    const userAgent = await page.evaluate(() => navigator.userAgent)
+    await page.setUserAgent(`${userAgent} ${opts.useragent}`)
   }
-  
+
   if (!opts.quiet) {
-    const uA = await page.evaluate(() => navigator.userAgent);
-    console.log(`User agent: ${uA}`);
+    const uA = await page.evaluate(() => navigator.userAgent)
+    console.log(`User agent: ${uA}`)
   }
 
   // see https://stackoverflow.com/a/57677369 for other value of "waitUntil"

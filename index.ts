@@ -48,12 +48,12 @@ lecommander.parse(process.argv)
 if (!lecommander.url) {
   lecommander.help()
 }
-
+if (lecommander.dumpOptions) {
+  console.log(lecommander.opts())
+}
 if (lecommander.url && !lecommander.quiet) {
   console.log(`Starting point: ${lecommander.url}`)
 }
-
 lecommander.performance = primitiveToBoolean(lecommander.performance)
-if (lecommander.dumpOptions) console.log(lecommander.opts())
 
 start()

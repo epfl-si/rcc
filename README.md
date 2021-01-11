@@ -24,9 +24,12 @@ they will be cached in cloudflare service.
 | `-q`| `--quiet`          | limit ouptut console       | false    |
 | `-r`| `--report`         | output final report        | false    |
 | `-u`| `--url <url>`      | `url` to start with        | required |
+| `-p` | `--performance`    | show performance data           | true     |
 
 ## ToDos
 - [ ] add a timer (per site + total)
+- [x] add a timer (per site + total)
+- [x] add a timer option
 - [ ] add a report after exectution (num of screenshots, error, ...)
 - [x] add a limit on domain
 - [ ] add screenshot option

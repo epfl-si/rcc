@@ -2,6 +2,7 @@ import { URL } from 'url'
 import fs from 'fs'
 import puppeteer from 'puppeteer'
 import tld from 'tld-extract'
+import { performance } from 'perf_hooks'
 
 const dataDir = 'data'
 
@@ -46,6 +47,8 @@ const screenshot = async (link: string, opts: any) => {
 
   // loop over page's links
   for (const href of links) {
+    const siteT0 = performance.now()
+
     if (!href.startsWith('http')) {
       continue
     }
@@ -82,6 +85,12 @@ const screenshot = async (link: string, opts: any) => {
 
     if (opts.report) {
       console.log('WIP - REPORT')
+    }
+
+    if (opts.performance) {
+      const siteT1 = performance.now()
+      const tet = ((siteT1 - siteT0) / 1000).toFixed(2)
+      console.log(`  ↳ Site execution time ${tet} seconds.`)
     }
   }
 

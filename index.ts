@@ -1,13 +1,24 @@
-import screenshot from './screenshot'
+import explore from './explore'
 import lecommander from 'commander'
-import { performance } from 'perf_hooks'
 
 const start = async () => {
-  const t0 = performance.now()
-  await screenshot(lecommander.url, lecommander.opts())
-  const t1 = performance.now()
-  const tet = ((t1 - t0) / 1000).toFixed(2)
-  console.log(`Total execution time ${tet} seconds.`)
+  const reports = await explore(lecommander.url, lecommander.opts())
+  if (lecommander.report) {
+    report(reports)
+  }
+}
+
+const report = (report: any) => {
+  let date = new Date()
+  console.log('---------------------------------------')
+  console.log(`Date: ${date.toISOString()}`)
+  console.log(`Total Executation Time: ${report.total.time}s`)
+  console.log(`Visited: ${report.total.visited}`)
+  console.log(`Excluded: ${report.total.excluded}`)
+  console.log(`Average: ${report.average}`)
+  console.log(`Max: ${report.max.time}s for ${report.max.url.url}`)
+  console.log(`Min: ${report.min.time}s for ${report.min.url.url}`)
+  console.log('---------------------------------------')
 }
 
 function primitiveToBoolean(value: string): boolean {
@@ -28,7 +39,9 @@ lecommander
   .option('-p, --performance <bool>', 'show performance data', true)
   .option('-q, --quiet', 'limit ouptut console', false)
   .option('-r, --report', 'output final report', false)
+  .option('-t, --timeout <timeout>', 'set timeout in milliseconds', '30000')
   .option('-u, --url <url>', '`url` to start with')
+  .option('-ua, --useragent <useragent>','set useragent')
 
 lecommander.parse(process.argv)
 

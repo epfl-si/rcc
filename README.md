@@ -17,19 +17,14 @@ they will be cached in cloudflare service.
 
 ### Options
 
-| arg  | full               | description                     | default  |
-| ---- | ------------------ | ------------------------------- | -------- |
-| `-d` | `--debug`          | output extra debugging          | false    |
-| `-l` | `--limit <domain>` | limit to a specific domain      | false    |
-| `-ns`| `--no-screenshot`  | save screenshot of visited site | false    |
-| `-p` | `--performance`    | show performance data           | true     |
-| `-q` | `--quiet`          | limit ouptut console            | false    |
-| `-r` | `--report`         | output final report             | false    |
-| `-u` | `--url <url>`      | `url` to start with             | required |
-
-## ToDos
-- [x] add a timer (per site + total)
-- [x] add a timer option
-- [ ] add a report after exectution (num of screenshots, error, ...)
-- [x] add a limit on domain
-- [x] add screenshot option
+| arg   | full                      | description                     | default  |
+| ----- | ------------------------- | ------------------------------- | -------- |
+| `-d`  | `--debug`                 | output extra debugging          | false    |
+| `-l`  | `--limit <domain>`        | limit to a specific domain      | false    |
+| `-ns` | `--no-screenshot`         | save screenshot of visited site | false    |
+| `-p`  | `--performance`           | show performance data           | true     |
+| `-q`  | `--quiet`                 | limit ouptut console            | false    |
+| `-r`  | `--report`                | output final report             | false    |
+| `-t`  | `--timeout <timeout>`     | set timeout in milliseconds     | 30000    |
+| `-u`  | `--url <url>`             | `url` to start with             | required |
+| `-ua` | `--useragent <useragent>` | set useragent                   | default  |

@@ -30,6 +30,7 @@ const excludesURL = [
   'mycamipro.epfl.ch',
   'news.epfl.ch',
   'people.epfl.ch',
+  'personnes.epfl.ch',
   'plan.epfl.ch',
   'scitas-data.epfl.ch',
   'scitas.epfl.ch',

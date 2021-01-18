@@ -14,7 +14,16 @@ const concurrency = args[4] || 10
 const output_file = args[5] || 'off'
 const output_folder = './data/__out/'
 const includesURL = ['.epfl.ch']
-const excludesURL = ['go.epfl.ch']
+const excludesURL = [
+                      'absences.epfl.ch',
+                      'actu.epfl.ch',
+                      'edu.epfl.ch',
+                      'go.epfl.ch',
+                      'infoscience.epfl.ch',
+                      'memento.epfl.ch',
+                      'news.epfl.ch',
+                      'people.epfl.ch',
+                    ]
 
 function Visited() {
   let evt = new EventEmitter()

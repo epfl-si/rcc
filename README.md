@@ -15,6 +15,10 @@ they will be cached in cloudflare service.
 
 `npm start -- --url https://www.epfl.ch --limit epfl.ch --report --no-screenshot`
 
+### Generate a list of URL
+
+`node qalpl.js https://www.epfl.ch 1 1 out_epfl.txt`
+
 ### Options
 
 | arg   | full                      | description                     | default  |

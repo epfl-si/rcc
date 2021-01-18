@@ -1,8 +1,15 @@
-import explore from './explore'
+import { explore, discover } from './explore'
 import lecommander from 'commander'
 
 const start = async () => {
-  const reports = await explore(lecommander.url, lecommander.opts())
+  let reports: any
+
+  if (lecommander.url) {
+    reports = await explore(lecommander.url, lecommander.opts())
+  }
+  if (lecommander.file) {
+    reports = await discover(lecommander.file, lecommander.opts())
+  }
   if (lecommander.report) {
     report(reports)
   }
@@ -33,6 +40,7 @@ lecommander
   .name('npm start -- ')
   .usage('--url https://www.epfl.ch --limit epfl.ch -d -r -ns')
   .description('An application that screenshot all pages from a starting URL')
+  .option('-f, --file <file>', '`file` containing urls to visit')
   .option('-l, --limit <domain>', 'limit to a specific domain')
   .option('-ns, --no-screenshot', 'save screenshot of visited site')
   .option('-o, --dump-options', 'dump run time options', false)
@@ -40,12 +48,11 @@ lecommander
   .option('-q, --quiet', 'limit ouptut console', false)
   .option('-r, --report', 'output final report', false)
   .option('-t, --timeout <timeout>', 'set timeout in milliseconds', '30000')
-  .option('-u, --url <url>', '`url` to start with')
-  .option('-ua, --useragent <useragent>', 'set useragent')
+  .option('-u, --url <url>', '`url` to start with', false)
+  .option('-ua, --useragent <useragent>', 'set useragent', 'idev-fsd')
 
 lecommander.parse(process.argv)
-
-if (!lecommander.url) {
+if (!lecommander.url && !lecommander.file) {
   lecommander.help()
 }
 if (lecommander.dumpOptions) {
@@ -53,6 +60,9 @@ if (lecommander.dumpOptions) {
 }
 if (lecommander.url && !lecommander.quiet) {
   console.log(`Starting point: ${lecommander.url}`)
+}
+if (lecommander.file && !lecommander.quiet) {
+  console.log(`Starting point: ${lecommander.file}`)
 }
 lecommander.performance = primitiveToBoolean(lecommander.performance)
 

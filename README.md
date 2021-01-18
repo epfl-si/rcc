@@ -23,6 +23,7 @@ they will be cached in cloudflare service.
 
 | arg   | full                      | description                     | default  |
 | ----- | ------------------------- | ------------------------------- | -------- |
+| `-f`  | `--file <file>`           | `file` containing urls list     | required |
 | `-l`  | `--limit <domain>`        | limit to a specific domain      | false    |
 | `-ns` | `--no-screenshot`         | save screenshot of visited site | false    |
 | `-o`  | `--dump-options`          | dump run time options           | false    |

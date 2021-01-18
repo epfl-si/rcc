@@ -12,6 +12,7 @@ const entryURL    = args[2] || 'https://www.epfl.ch'
 const depth       = args[3] || 2
 const concurrency = args[4] || 10
 const output_file = args[5] || 'off'
+const output_folder = './data/__out/'
 
 function Visited() {
   let evt = new EventEmitter
@@ -132,7 +133,7 @@ let isPDF = (url) => {
 }
 
 const saveOutput = (link) => {
-  fs.appendFile(output_file, `${link}\n`, function (err) {
+  fs.appendFile(`${output_folder}${output_file}`, `${link}\n`, function (err) {
     if (err) throw err
   })
 }
@@ -144,13 +145,13 @@ async function scrape (url, depth, opts){
   let links = await getPageLinks(url, body)
   if (opts.keep) links = links.filter(opts.keep)
   links.map( (new_url) => {
-    
+
     // if (isPDF(new_url)) return
-    
+
     let cleaned_url = URL.parse(new_url).hostname + URL.parse(new_url).pathname
     if (visited.has(cleaned_url)) return
 
-    visited.add(cleaned_url)    
+    visited.add(cleaned_url)
 
     if (output_file !== 'off') saveOutput(URL.parse(new_url).href)
 

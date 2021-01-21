@@ -13,7 +13,7 @@ const depth = args[3] || 2
 const concurrency = args[4] || 10
 const output_file = args[5] || 'off'
 const output_folder = './data/__out/'
-const includesURL = ['.epfl.ch']
+const includesURL = ['www.epfl.ch/labs']
 const excludesURL = [
   'absences.epfl.ch',
   'actu.epfl.ch',
@@ -81,7 +81,7 @@ let Limitator = (concurrency, funk) => {
   let evt = new EventEmitter()
 
   let limitated = async function (/* ... */) {
-    while (parallel_invokes > concurrency) await sleep(1)
+    while (parallel_invokes > concurrency) await sleep(0.25)
     parallel_invokes += 1
     evt.emit('parallels', parallel_invokes)
     let retVal = await funk.apply({}, arguments)
@@ -95,7 +95,9 @@ let Limitator = (concurrency, funk) => {
 
 let getPageBody = Limitator(concurrency, async url => {
   try {
-    return await rp(url)
+    if (!isPDF(url)){
+      return await rp(url)
+    }
   } catch (e) {
     console.error(e)
   }
@@ -146,13 +148,16 @@ const sleep = sec => {
 }
 
 async function getPageLinks(url, body) {
-  const $ = await cheerio.load(body)
   let retval = []
-  $('a').map(function (i, e) {
-    let href = $(e).attr('href')
-    if (!href || href.match('mailto:')) return
-    retval.push(URL.resolve(url, href))
-  })
+  if (!isPDF(url)) {
+    const $ = await cheerio.load(body)
+    
+    $('a').map(function (i, e) {
+      let href = $(e).attr('href')
+      if (!href || href.match('mailto:')) return
+      retval.push(URL.resolve(url, href))
+    })
+  }
   return retval
 }
 
@@ -160,10 +165,15 @@ let isPDF = url => {
   return URL.parse(url).pathname.endsWith('.pdf')
 }
 
-const saveOutput = link => {
-  fs.appendFile(`${output_folder}${output_file}`, `${link}\n`, function (err) {
+const saveOutput = result => {
+  let data = '';
+  for (let index in result ) {
+    data += index + '\n'
+  }
+  fs.writeFile(`${output_folder}${output_file}`, data, function (err) {
     if (err) throw err
   })
+
 }
 
 async function scrape(url, depth, opts) {
@@ -179,8 +189,6 @@ async function scrape(url, depth, opts) {
     if (visited.has(cleaned_url)) return
 
     visited.add(cleaned_url)
-
-    if (output_file !== 'off') saveOutput(URL.parse(new_url).href)
 
     scrape(new_url, depth - 1, opts)
   })
@@ -204,10 +212,19 @@ const testURL = url => {
   return incl && excl
 }
 
-scrape(entryURL, depth, {
-  //keep(url) { return url.match(URL.parse(entryURL).hostname) }
-  //keep(url) { return url.includes('.epfl.ch') }
-  keep(url) {
-    return testURL(url)
-  },
-})
+const run_scrape = async(entryURL, depth) => {
+  await scrape(entryURL, depth, {
+    //keep(url) { return url.match(URL.parse(entryURL).hostname) }
+    //keep(url) { return url.includes('.epfl.ch') }
+    keep(url) {
+      return testURL(url)
+    },
+  })
+
+  if (output_file !== 'off') saveOutput(visited.dataURLs.visited)
+
+  //console.log("RESULT: ", visited.dataURLs);
+}
+
+run_scrape(entryURL, depth)
+

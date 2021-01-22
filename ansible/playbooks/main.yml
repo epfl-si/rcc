@@ -1,0 +1,29 @@
+- name: Check if environment is set
+  hosts: all
+  tasks:
+    -
+      debug:
+        msg: "Starting ansible with {{ runenv }} environment."
+
+- name: RCC
+  hosts: switch
+  gather_facts: no   # Not yet
+  # Variables common to all roles
+  roles:
+    - name: install needed softwares
+      role: ../roles/softwares
+      become: yes
+      tags: soft
+
+    - name: grant accesses
+      role: ../roles/accesses
+      become: yes
+      tags: access
+
+    - name: deploy and run
+      role: ../roles/deploy
+      tags: deploy
+
+    - name: run
+      role: ../roles/run
+      tags: run

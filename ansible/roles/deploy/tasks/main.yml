@@ -1,0 +1,21 @@
+---
+- name: "Create {{ rcc_install_path }}"
+  file:
+    path: "{{ rcc_install_path }}"
+    state: directory
+    mode: '0755'
+    owner: ubuntu
+    group: ubuntu
+  become: yes
+
+- name: Clone/Update rcc
+  git:
+    repo: 'https://github.com/epfl-si/rcc.git'
+    dest: "{{ rcc_install_path }}"
+    update: yes
+
+- name: Running npm i
+  shell: |
+    cd "{{ rcc_install_path }}"
+    npm i --no-fund
+  become: yes

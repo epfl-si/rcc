@@ -1,0 +1,6 @@
+---
+- name: install softwares
+  apt:
+    name: ['git', 'vim', 'tmux', 'nodejs', 'npm']
+    state: present
+

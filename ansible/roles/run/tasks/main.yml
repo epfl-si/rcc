@@ -1,0 +1,15 @@
+---
+- name: Launch tmux session
+  shell: |
+    tmux set-option remain-on-exit on
+    tmux setw remain-on-exit on
+    tmux new-session -d -s rcc -n workspace 'bash -l'
+    tmux new-window -n htop -t rcc: 'htop'
+  args:
+    executable: /bin/bash
+
+- name: Run qalpl.js script in a tmux windows
+  shell: |
+    tmux new-window -n qalpl -t rcc: 'cd /srv/rcc; node qalpl.js https://www.epfl.ch 2 1 urls.txt; bash'
+  tags:
+    - qalpl

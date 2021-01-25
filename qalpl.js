@@ -13,10 +13,12 @@ const depth = args[3] || 2
 const concurrency = args[4] || 10
 const output_file = args[5] || 'off'
 const output_folder = './data/__out/'
+
 if (!fs.existsSync(output_folder)) {
   fs.mkdirSync(output_folder)
 }
 const includesURL = ['.epfl.ch']
+
 const excludesURL = [
   'absences.epfl.ch',
   'actu.epfl.ch',

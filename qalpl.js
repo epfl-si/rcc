@@ -144,11 +144,15 @@ function View() {
 }
 View()
 
+function sum(obj) {
+  return Object.keys(obj).reduce((sum,key)=>sum+parseFloat(obj[key]||0),0);
+}
+
 function prettyPrint(data) {
   //let totalvisited = Object.keys(data.visited).length
   //let totalvisited = data.visits
   //return true
-  // console.clear()
+  console.clear()
   // console.log('--------------------------------------------------------------------------------')
   // console.log('\x1b[1m', ' Checking:\x1b[0m', entryURL + ' with depth=' + depth + ' and concurrency=' + concurrency)
   // console.log('\x1b[1m', '   Output:\x1b[0m', output_file)
@@ -160,7 +164,7 @@ function prettyPrint(data) {
   // console.log('\x1b[1m', ' Visited:\x1b[0m', totalvisited)
   // console.log('--------------------------------------------------------------------------------')
   // console.log('--------------------------------------------- https://gitlab.com/epfl-dojo/qalpl')
-  console.log('data.collected:', data.collected)
+  console.log('data.collected:', sum(data.collected))
 
   saveOutput(data.collected)
 

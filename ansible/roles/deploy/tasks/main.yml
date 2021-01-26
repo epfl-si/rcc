@@ -13,6 +13,7 @@
     repo: 'https://github.com/epfl-si/rcc.git'
     dest: "{{ rcc_install_path }}"
     update: yes
+    force: yes
 
 - name: Running npm i
   shell: |

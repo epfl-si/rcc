@@ -3,6 +3,7 @@
   shell: |
     tmux set-option remain-on-exit on
     tmux setw remain-on-exit on
+    tmux set-option -g history-limit 50000
     tmux new-session -d -s rcc -n workspace 'bash -l'
     tmux new-window -n htop -t rcc: 'htop'
   args:

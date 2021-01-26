@@ -11,14 +11,16 @@
   tags:
     - qalpl
     - rcc
+    - only
 #
 # Run the qalpl scripts, better to be use with --limit host
 #
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch 2 3)
   shell: |
-    tmux new-window -n qalpl1 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch 2 3 urls_www_en_2_3.txt; date; bash'
+    tmux new-window -n qalpl1 -t rcc: 'cd /srv/rcc; date; time node --max_old_space_size=4096 qalpl.js https://www.epfl.ch 2 3 urls_www_en_2_3.txt; date; bash'
   tags:
     - qalpl
+    - only
 
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/fr 2 3)
   shell: |

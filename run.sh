@@ -18,7 +18,10 @@ start=`date +%s`
 #end=`date +%s`
 #runtime=$((end-start))
 
+# sort, dedup and add protocl
 cat ./data/__out/*.txt | sort -n | uniq > ./urls.txt
+sed -i -e 's/^/https:\/\//' urls.txt
+# count URLs
 cat urls.txt | wc -l
 
 time npm start -- --file './urls.txt' --performance --report --useragent FSD

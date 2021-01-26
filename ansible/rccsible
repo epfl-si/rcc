@@ -48,11 +48,10 @@ platform_check () {
     export ANSIBLE_ROLES_PATH="$PWD/ansible-deps-cache/roles"
 }
 
-inventory_mode="dev"
+inventory_mode="normal"
 inventories () {
     case "$inventory_mode" in
-        dev) echo "-i inventory/hosts-dev.yml"  ;;
-        prod) echo "-i inventory/hosts-prod.yml"  ;;
+        normal) echo "-i inventory/hosts.yml"  ;;
         *) fatal "Invalid inventory_mode" ;;
     esac
 
@@ -67,8 +66,6 @@ while [ "$#" -gt 0 ]; do
   case "$1" in
         -m) mode=ansible
             ansible_args+=("-m")
-            shift ;;
-        --prod) inventory_mode="prod"
             shift ;;
         *)
             ansible_args+=("$1")

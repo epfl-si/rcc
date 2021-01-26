@@ -251,7 +251,7 @@ const run_scrape = async(entryURL, depth) => {
       return testURL(url)
     },
   })
-
+  console.log("Finishing...")
 }
 
 run_scrape(entryURL, depth)

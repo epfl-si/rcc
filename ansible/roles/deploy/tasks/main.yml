@@ -3,7 +3,16 @@
   file:
     path: "{{ rcc_install_path }}"
     state: directory
-    mode: '0755'
+    mode: '0775'
+    owner: ubuntu
+    group: ubuntu
+  become: yes
+
+- name: "Ensure that /srv is writable"
+  file:
+    path: /srv
+    state: directory
+    mode: '0775'
     owner: ubuntu
     group: ubuntu
   become: yes

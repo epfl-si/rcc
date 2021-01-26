@@ -164,7 +164,7 @@ function prettyPrint(data) {
   // console.log('\x1b[1m', ' Visited:\x1b[0m', totalvisited)
   // console.log('--------------------------------------------------------------------------------')
   // console.log('--------------------------------------------- https://gitlab.com/epfl-dojo/qalpl')
-  console.log('data.collected:', sum(data.collected))
+  console.log(`Already collected ${sum(data.collected)} URLs (this includes duplucate)`)
 
   saveOutput(data.collected)
 

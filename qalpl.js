@@ -146,20 +146,20 @@ View()
 
 function prettyPrint(data) {
   //let totalvisited = Object.keys(data.visited).length
-  let totalvisited = data.visits
+  //let totalvisited = data.visits
   //return true
-  console.clear()
-  console.log('--------------------------------------------------------------------------------')
-  console.log('\x1b[1m', ' Checking:\x1b[0m', entryURL + ' with depth=' + depth + ' and concurrency=' + concurrency)
-  console.log('\x1b[1m', '   Output:\x1b[0m', output_file)
-  console.log('--------------------------------------------------------------------------------')
-  console.log('\x1b[1m', ' Current:\x1b[0m', data.current)
-  console.log('\x1b[1m', ' Longest:\x1b[0m', data.longest.length)
-  console.log('          ', data.longest.url)
-  console.log('\x1b[1m', ' Pending:\x1b[0m', data.pending + ' requests')
-  console.log('\x1b[1m', ' Visited:\x1b[0m', totalvisited)
-  console.log('--------------------------------------------------------------------------------')
-  console.log('--------------------------------------------- https://gitlab.com/epfl-dojo/qalpl')
+  // console.clear()
+  // console.log('--------------------------------------------------------------------------------')
+  // console.log('\x1b[1m', ' Checking:\x1b[0m', entryURL + ' with depth=' + depth + ' and concurrency=' + concurrency)
+  // console.log('\x1b[1m', '   Output:\x1b[0m', output_file)
+  // console.log('--------------------------------------------------------------------------------')
+  // console.log('\x1b[1m', ' Current:\x1b[0m', data.current)
+  // console.log('\x1b[1m', ' Longest:\x1b[0m', data.longest.length)
+  // console.log('          ', data.longest.url)
+  // console.log('\x1b[1m', ' Pending:\x1b[0m', data.pending + ' requests')
+  // console.log('\x1b[1m', ' Visited:\x1b[0m', totalvisited)
+  // console.log('--------------------------------------------------------------------------------')
+  // console.log('--------------------------------------------- https://gitlab.com/epfl-dojo/qalpl')
   console.log('data.collected:', data.collected)
 
   saveOutput(data.collected)

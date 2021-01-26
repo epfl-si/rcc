@@ -17,8 +17,9 @@ const output_folder = './data/__out/'
 if (!fs.existsSync(output_folder)) {
   fs.mkdirSync(output_folder)
 }
-const includesURL = ['.epfl.ch']
-
+const includesURL = ['www.epfl.ch']
+//const includesURL = ['www.epfl.ch/labs/alice']
+//const includesURL = ['86.119.30.59']
 const excludesURL = [
   'absences.epfl.ch',
   'actu.epfl.ch',
@@ -48,6 +49,7 @@ function Visited() {
 
   var dataURLs = {
     visited: {},
+    collected: {},
     visits: 0,
     longest: {
       length: 0,
@@ -58,6 +60,17 @@ function Visited() {
   }
 
   return {
+    collected_add(url) {
+      if (typeof dataURLs.collected[url] == 'undefined') {
+        dataURLs.collected[url] = 1
+      } else {
+        dataURLs.collected[url] += 1
+      }
+    },
+    collected_has(url) {
+      return !!dataURLs.collected[url]
+    },
+
     add(url) {
       dataURLs.current = url
       if (evt) {
@@ -134,6 +147,7 @@ View()
 function prettyPrint(data) {
   //let totalvisited = Object.keys(data.visited).length
   let totalvisited = data.visits
+  //return true
   console.clear()
   console.log('--------------------------------------------------------------------------------')
   console.log('\x1b[1m', ' Checking:\x1b[0m', entryURL + ' with depth=' + depth + ' and concurrency=' + concurrency)
@@ -146,6 +160,10 @@ function prettyPrint(data) {
   console.log('\x1b[1m', ' Visited:\x1b[0m', totalvisited)
   console.log('--------------------------------------------------------------------------------')
   console.log('--------------------------------------------- https://gitlab.com/epfl-dojo/qalpl')
+  console.log('data.collected:', data.collected)
+
+  saveOutput(data.collected)
+
 }
 
 const sleep = sec => {
@@ -159,7 +177,8 @@ async function getPageLinks(url, body) {
 
     $('a').map(function (i, e) {
       let href = $(e).attr('href')
-      if (!href || href.match('mailto:')) return
+      if (!href || href.match('mailto:') || href.match('tel:')) return
+      //visited.collected_add(URL.resolve(url, href))
       retval.push(URL.resolve(url, href))
     })
   }
@@ -190,6 +209,8 @@ async function scrape(url, depth, opts) {
   links.map(new_url => {
     // if (isPDF(new_url)) return
 
+    let cleaned_url_with_http = URL.parse(new_url).protocol + '//' + URL.parse(new_url).hostname + URL.parse(new_url).pathname
+    visited.collected_add(cleaned_url_with_http)
     let cleaned_url = URL.parse(new_url).hostname + URL.parse(new_url).pathname
     if (visited.has(cleaned_url)) return
 
@@ -200,6 +221,7 @@ async function scrape(url, depth, opts) {
 }
 
 const testURL = url => {
+
   let incl = false
   includesURL.forEach(item => {
     if (url.includes(item)) {
@@ -226,9 +248,6 @@ const run_scrape = async(entryURL, depth) => {
     },
   })
 
-  if (output_file !== 'off') saveOutput(visited.dataURLs.visited)
-
-  //console.log("RESULT: ", visited.dataURLs);
 }
 
 run_scrape(entryURL, depth)

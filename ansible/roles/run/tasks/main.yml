@@ -8,33 +8,39 @@
   args:
     executable: /bin/bash
 
-- name: Run qalpl.js script in a tmux windows (https://www.epfl.ch 1 3)
-  shell: |
-    tmux new-window -n qalpl1 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch 1 3 urls_www_1_3.txt; date; bash'
-  tags:
-    - qalpl
-
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch 2 3)
   shell: |
-    tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch 2 3 urls_www_2_3.txt; date; bash'
+    tmux new-window -n qalpl1 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch 2 3 urls_www_en_2_3.txt; date; bash'
   tags:
     - qalpl
 
-- name: Run qalpl.js script in a tmux windows (https://www.epfl.ch 3 3)
+- name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/fr 2 3)
   shell: |
-    tmux new-window -n qalpl3 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch 3 3 urls_www_3_3.txt; date; bash'
+    tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/fr/ 2 3 urls_www_fr_2_3.txt; date; bash'
   tags:
     - qalpl
 
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/labs 2 3)
   shell: |
-    tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/labs 2 3 urls_www_labs_2_3.txt; date; bash'
+    tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/labs 2 3 urls_www_labs_en_2_3.txt; date; bash'
+  tags:
+    - qalpl
+
+- name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/labs/fr 2 3)
+  shell: |
+    tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/labs/fr/ 2 3 urls_www_labs_fr_2_3.txt; date; bash'
   tags:
     - qalpl
 
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/campus/associations/list/ 2 3)
   shell: |
-    tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/campus/associations/list/ 2 3 urls_www_campus_associations_2_3.txt; date; bash'
+    tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/campus/associations/list/ 2 3 urls_www_campus_associations_en_2_3.txt; date; bash'
+  tags:
+    - qalpl
+
+- name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/campus/associations/list/ 2 3)
+  shell: |
+    tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/campus/associations/list/fr/ 2 3 urls_www_campus_associations_fr_2_3.txt; date; bash'
   tags:
     - qalpl
 

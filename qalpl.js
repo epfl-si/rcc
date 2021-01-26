@@ -17,9 +17,14 @@ const output_folder = './data/__out/'
 if (!fs.existsSync(output_folder)) {
   fs.mkdirSync(output_folder)
 }
+<<<<<<< Updated upstream
 const includesURL = ['www.epfl.ch']
 //const includesURL = ['www.epfl.ch/labs/alice']
 //const includesURL = ['86.119.30.59']
+=======
+const includesURL = ['86.119.30.59']
+
+>>>>>>> Stashed changes
 const excludesURL = [
   'absences.epfl.ch',
   'actu.epfl.ch',
@@ -165,9 +170,7 @@ function prettyPrint(data) {
   // console.log('--------------------------------------------------------------------------------')
   // console.log('--------------------------------------------- https://gitlab.com/epfl-dojo/qalpl')
   console.log(`Already collected ${sum(data.collected)} URLs (this includes duplucate)`)
-
   saveOutput(data.collected)
-
 }
 
 const sleep = sec => {
@@ -212,10 +215,15 @@ async function scrape(url, depth, opts) {
   if (opts.keep) links = links.filter(opts.keep)
   links.map(new_url => {
     // if (isPDF(new_url)) return
+<<<<<<< Updated upstream
 
     let cleaned_url_with_http = URL.parse(new_url).protocol + '//' + URL.parse(new_url).hostname + URL.parse(new_url).pathname
     visited.collected_add(cleaned_url_with_http)
+=======
+    console.log("new_url:", new_url)
+>>>>>>> Stashed changes
     let cleaned_url = URL.parse(new_url).hostname + URL.parse(new_url).pathname
+    console.log("cleaned_url:", cleaned_url)
     if (visited.has(cleaned_url)) return
 
     visited.add(cleaned_url)
@@ -251,7 +259,18 @@ const run_scrape = async(entryURL, depth) => {
       return testURL(url)
     },
   })
+<<<<<<< Updated upstream
   console.log("Finishing...")
+=======
+
+  if (output_file !== 'off') {
+    
+    saveOutput(visited.dataURLs.visited)
+    console.log("RESULT: ", visited);
+  }
+
+  
+>>>>>>> Stashed changes
 }
 
 run_scrape(entryURL, depth)

@@ -17,169 +17,61 @@ const output_folder = './data/__out/'
 if (!fs.existsSync(output_folder)) {
   fs.mkdirSync(output_folder)
 }
-<<<<<<< Updated upstream
-const includesURL = ['www.epfl.ch']
-//const includesURL = ['www.epfl.ch/labs/alice']
-//const includesURL = ['86.119.30.59']
-=======
-const includesURL = ['86.119.30.59']
 
->>>>>>> Stashed changes
-const excludesURL = [
-  'absences.epfl.ch',
-  'actu.epfl.ch',
-  'blogs.epfl.ch',
-  'edu.epfl.ch',
-  'epnet.epfl.ch',
-  'go.epfl.ch',
-  'infoscience.epfl.ch',
-  'inside.epfl.ch',
-  'map.epfl.ch',
-  'mediatheque.epfl.ch',
-  'memento.epfl.ch',
-  'moodle.epfl.ch',
-  'mycamipro.epfl.ch',
-  'news.epfl.ch',
-  'people.epfl.ch',
-  'personnes.epfl.ch',
-  'plan.epfl.ch',
-  'scitas-data.epfl.ch',
-  'scitas.epfl.ch',
-  'sesame.epfl.ch',
-  'wiki.epfl.ch',
-]
-
-function Visited() {
-  let evt = new EventEmitter()
-
-  var dataURLs = {
-    visited: {},
-    collected: {},
-    visits: 0,
-    longest: {
-      length: 0,
-      url: '',
-    },
-    current: '',
-    pending: '',
-  }
-
-  return {
-    collected_add(url) {
-      if (typeof dataURLs.collected[url] == 'undefined') {
-        dataURLs.collected[url] = 1
-      } else {
-        dataURLs.collected[url] += 1
-      }
-    },
-    collected_has(url) {
-      return !!dataURLs.collected[url]
-    },
-
-    add(url) {
-      dataURLs.current = url
-      if (evt) {
-        evt.emit('visited', url)
-      }
-      dataURLs.visited[url] = 1
-      dataURLs.visits++
-      if (url.length > dataURLs.longest.length) {
-        dataURLs.longest.length = url.length
-        dataURLs.longest.url = url
-        if (evt) {
-          evt.emit('longest', url)
-        }
-      }
-    },
-    has(url) {
-      return !!dataURLs.visited[url]
-    },
-    evt,
-    dataURLs,
-  }
-}
-
+/**
+ * Limit invocations of `funk` to at most `concurrency` at a time.
+ *
+ * @return An async function that works like `funk` (same arguments,
+ *         same (promised) return value), but may take longer.
+ */
 let Limitator = (concurrency, funk) => {
-  var parallel_invokes = 0
-  let evt = new EventEmitter()
+  let running = [],
+    waiting = []
 
-  let limitated = async function (/* ... */) {
-    while (parallel_invokes > concurrency) await sleep(0.25)
-    parallel_invokes += 1
-    evt.emit('parallels', parallel_invokes)
-    let retVal = await funk.apply({}, arguments)
-    parallel_invokes -= 1
-    evt.emit('parallels', parallel_invokes)
-    return retVal
+  function awaitSlot() {
+    return new Promise((resolve, reject) => {
+      waiting.push({ resolve, reject })
+      shake()
+    })
   }
-  limitated.on = evt.on.bind(evt)
-  return limitated
+
+  function releaseSlot(slot) {
+    const oldLength = running.length
+    running = running.filter(s => s !== slot)
+    if (running.length != oldLength - 1) {
+      throw new Error('Assumption violated in releaseSlot!')
+    }
+    shake()
+  }
+
+  function shake() {
+    if (running.length >= concurrency) return
+    const next = waiting.shift() // LIFO
+    if (!next) return
+    running.push(next)
+    next.resolve(next)
+  }
+
+  return async function (args) {
+    let slot = await awaitSlot()
+    try {
+      return await funk(args)
+    } finally {
+      releaseSlot(slot)
+    }
+  }
 }
 
 let getPageBody = Limitator(concurrency, async url => {
-  try {
-    if (!isPDF(url)){
-      return await rp(url)
-    }
-  } catch (e) {
-    console.error(e)
-  }
+  return await rp(url)
 })
-
-let visited = Visited()
-
-function View() {
-  let observer = visited.evt
-  let dataURLs = visited.dataURLs
-
-  observer.on('visited', url => {
-    /* ... TODO: count 'em */
-    prettyPrint(dataURLs)
-    // console.log("Current", dataURLs.current)
-  })
-  observer.on('longest', url => {
-    prettyPrint(dataURLs)
-    //console.log("Longest", dataURLs.longest.url, longestURL.longest.length)
-  })
-  getPageBody.on('parallels', n => {
-    dataURLs.pending = n
-    prettyPrint(dataURLs)
-    //console.log(n + " pending requests")
-  })
-}
-View()
-
-function sum(obj) {
-  return Object.keys(obj).reduce((sum,key)=>sum+parseFloat(obj[key]||0),0);
-}
-
-function prettyPrint(data) {
-  //let totalvisited = Object.keys(data.visited).length
-  //let totalvisited = data.visits
-  //return true
-  console.clear()
-  // console.log('--------------------------------------------------------------------------------')
-  // console.log('\x1b[1m', ' Checking:\x1b[0m', entryURL + ' with depth=' + depth + ' and concurrency=' + concurrency)
-  // console.log('\x1b[1m', '   Output:\x1b[0m', output_file)
-  // console.log('--------------------------------------------------------------------------------')
-  // console.log('\x1b[1m', ' Current:\x1b[0m', data.current)
-  // console.log('\x1b[1m', ' Longest:\x1b[0m', data.longest.length)
-  // console.log('          ', data.longest.url)
-  // console.log('\x1b[1m', ' Pending:\x1b[0m', data.pending + ' requests')
-  // console.log('\x1b[1m', ' Visited:\x1b[0m', totalvisited)
-  // console.log('--------------------------------------------------------------------------------')
-  // console.log('--------------------------------------------- https://gitlab.com/epfl-dojo/qalpl')
-  console.log(`Already collected ${sum(data.collected)} URLs (this includes duplucate)`)
-  saveOutput(data.collected)
-}
-
-const sleep = sec => {
-  return new Promise(resolve => setTimeout(resolve, sec * 1000))
-}
 
 async function getPageLinks(url, body) {
   let retval = []
   if (!isPDF(url)) {
+    if (typeof body !== 'string') {
+      debugger
+    }
     const $ = await cheerio.load(body)
 
     $('a').map(function (i, e) {
@@ -196,82 +88,129 @@ let isPDF = url => {
   return URL.parse(url).pathname.endsWith('.pdf')
 }
 
-const saveOutput = result => {
-  let data = '';
-  for (let index in result ) {
-    data += index + '\n'
-  }
-  fs.writeFile(`${output_folder}${output_file}`, data, function (err) {
-    if (err) throw err
-  })
+const backlog = (() => {
+  const backlog = {}
 
-}
+  return {
+    has(l) {
+      return !!backlog[l]
+    },
+    add(l) {
+      backlog[l] = 1
+    },
+  }
+})()
 
 async function scrape(url, depth, opts) {
   if (!opts) opts = {}
+  if (!opts.observer) {
+    opts.observer = { emit() {} }
+  }
   if (depth <= 0) return
-  let body = await getPageBody(url)
+
+  let body
+  try {
+    body = await getPageBody(url)
+  } catch (e) {
+    opts.observer.emit('error', e, url)
+    return
+  }
   let links = await getPageLinks(url, body)
   if (opts.keep) links = links.filter(opts.keep)
-  links.map(new_url => {
-    // if (isPDF(new_url)) return
-<<<<<<< Updated upstream
 
-    let cleaned_url_with_http = URL.parse(new_url).protocol + '//' + URL.parse(new_url).hostname + URL.parse(new_url).pathname
-    visited.collected_add(cleaned_url_with_http)
-=======
-    console.log("new_url:", new_url)
->>>>>>> Stashed changes
-    let cleaned_url = URL.parse(new_url).hostname + URL.parse(new_url).pathname
-    console.log("cleaned_url:", cleaned_url)
-    if (visited.has(cleaned_url)) return
+  opts.observer.emit('visited', url, body, depth)
 
-    visited.add(cleaned_url)
-
-    scrape(new_url, depth - 1, opts)
-  })
-}
-
-const testURL = url => {
-
-  let incl = false
-  includesURL.forEach(item => {
-    if (url.includes(item)) {
-      incl = true
-    }
-  })
-
-  let excl = true
-  excludesURL.forEach(item => {
-    if (url.includes(item)) {
-      excl = false
-    }
-  })
-
-  return incl && excl
-}
-
-const run_scrape = async(entryURL, depth) => {
-  await scrape(entryURL, depth, {
-    //keep(url) { return url.match(URL.parse(entryURL).hostname) }
-    //keep(url) { return url.includes('.epfl.ch') }
-    keep(url) {
-      return testURL(url)
-    },
-  })
-<<<<<<< Updated upstream
-  console.log("Finishing...")
-=======
-
-  if (output_file !== 'off') {
-    
-    saveOutput(visited.dataURLs.visited)
-    console.log("RESULT: ", visited);
+  function canonicalizeUrl(url) {
+    return URL.parse(url).protocol + '//' + URL.parse(url).hostname + URL.parse(url).pathname
   }
 
-  
->>>>>>> Stashed changes
+  const uniqueCanonicalLinks = [...new Set(links.map(canonicalizeUrl))]
+  for (let l of uniqueCanonicalLinks) {
+    opts.observer.emit('link', url, l)
+  }
+  const newLinks = uniqueCanonicalLinks.filter(l => !backlog.has(l))
+  for (let l of newLinks) {
+    opts.observer.emit('newlink', url, l)
+    backlog.add(l)
+  }
+
+  await Promise.all(newLinks.map(l => scrape(l, depth - 1, opts)))
 }
 
-run_scrape(entryURL, depth)
+const run_scrape = async (entryURL, depth, callbacks) => {
+  const start = new Date()
+  const observer = new EventEmitter()
 
+  for (const cb in callbacks) {
+    debugger
+    let matched
+    if ((matched = cb.match(/^on(.*)$/))) {
+      observer.on(matched[1].toLowerCase(), callbacks[cb])
+    }
+  }
+
+  await scrape(entryURL, depth, {
+    keep(url) {
+      return url.includes('.epfl.ch') && !isPDF(url)
+    },
+    observer,
+  })
+  console.info('Execution time: %ds', (new Date() - start)/1000)
+}
+
+const pageStats = (function PageStats() {
+  const stats = {}
+
+  function statsOf(page) {
+    if (!stats[page]) stats[page] = {}
+    return stats[page]
+  }
+  function setOf(page, key) {
+    const stats = statsOf(page)
+    if (!stats[key]) stats[key] = new Set()
+    return stats[key]
+  }
+  return {
+    link(from, to) {
+      setOf(from, 'linksFrom').add(to)
+      setOf(to, 'linksTo').add(from)
+    },
+    success(at, body) {
+      statsOf(at).status = 'OK'
+    },
+    error(at, error) {
+      statsOf(at).status = 'ERROR'
+      statsOf(at).error = error
+    },
+    report() {
+      return stats
+    },
+  }
+})()
+
+let logStream = fs.createWriteStream(`${output_folder}/${output_file}`, { flags: 'w' })
+run_scrape(entryURL, depth, {
+  onVisited(url, body, depth) {
+    console.log(`⟴ ${url} (visited at depth ${depth}) is ${body.length} characters long`)
+    pageStats.success(url, body)
+  },
+  onNewLink(url, newLink) {
+    console.log(` ↯ New link ${newLink} found at ${url}`)
+    logStream.write(`${newLink}\n`)
+  },
+  onLink(url, link) {
+    //console.log(` ↝ Link found ${link} found at ${url}`)
+    pageStats.link(url, link)
+  },
+  onError(error, url) {
+    if (error.options && error.options.uri) {
+      console.error(`Error at ${error.options.uri}`)
+    } else {
+      console.error(error)
+    }
+    pageStats.error(url, error)
+  },
+}).then(() => {
+  logStream.end()
+  //console.log(pageStats.report())
+})

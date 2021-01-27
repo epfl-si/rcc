@@ -216,7 +216,7 @@ const pageStats = (function PageStats() {
 let logStream = fs.createWriteStream(`${output_folder}/${output_file}`, { flags: 'w' })
 run_scrape(entryURL, depth, {
   onVisited(url, body, depth) {
-    console.log(`⟴  ${url} (visited at depth ${depth}) is ${body.length} characters long`)
+    console.log(`⟴  ${url} (visited at depth ${depth}) is ${url.length} characters long`)
     pageStats.success(url, body)
   },
   onNewLink(url, newLink) {

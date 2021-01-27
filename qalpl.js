@@ -93,11 +93,18 @@ async function getPageLinks(url, body) {
     }
     const $ = await cheerio.load(body)
 
+    // collect <a>'s href
     $('a').map(function (i, e) {
       let href = $(e).attr('href')
       if (!href || href.match('mailto:') || href.match('tel:')) return
-      //visited.collected_add(URL.resolve(url, href))
       retval.push(URL.resolve(url, href))
+    })
+    // collect <img>'s src
+    $('img').map(function (i, e) {
+      let img = $(e).attr('src')
+      console.log(img)
+      if (!img) return
+      retval.push(URL.resolve(url, img))
     })
   }
   return retval
@@ -169,7 +176,8 @@ const run_scrape = async (entryURL, depth, callbacks) => {
 
   await scrape(entryURL, depth, {
     keep(url) {
-      return url.includes(urlIncludes) && !isPDF(url)
+      //return url.includes(urlIncludes) && !isPDF(url)
+      return url.includes(urlIncludes)
     },
     observer,
   })

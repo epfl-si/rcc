@@ -102,7 +102,7 @@ async function getPageLinks(url, body) {
     // collect <img>'s src
     $('img').map(function (i, e) {
       let img = $(e).attr('src')
-      console.log(img)
+      // console.log(img)
       if (!img) return
       retval.push(URL.resolve(url, img))
     })

@@ -100,12 +100,14 @@ async function getPageLinks(url, body) {
       retval.push(URL.resolve(url, href))
     })
     // collect <img>'s src
+    /* Uncomment me to collect images' links (greedy)
     $('img').map(function (i, e) {
       let img = $(e).attr('src')
       // console.log(img)
       if (!img) return
       retval.push(URL.resolve(url, img))
     })
+    */
   }
   return retval
 }

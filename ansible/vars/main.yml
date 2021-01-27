@@ -1,2 +1,3 @@
 rcc_install_path: '/srv/rcc'
-
+tmux_config_file: '/home/ubuntu/.tmux.conf'
+tmux_history_limit: 200000

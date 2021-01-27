@@ -51,9 +51,9 @@
   tags:
     - softs.install
 
-- name: Create tmux.conf
+- name: "Create {{ tmux_config_file }}"
   file:
-    path: /home/ubuntu/.tmux.conf
+    path: "{{ tmux_config_file }}"
     state: touch
     mode: '0775'
     owner: ubuntu
@@ -63,9 +63,9 @@
 
 - name: Add scrollback capabilities to tmux
   lineinfile:
-    path: /home/ubuntu/.tmux.conf
+    path: "{{ tmux_config_file }}"
     state: present
-    line: "set-option -g history-limit 50000"
+    line: "set-option -g history-limit {{ tmux_history_limit }}"
   tags:
     - softs.config
 

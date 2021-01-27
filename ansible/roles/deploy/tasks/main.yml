@@ -1,31 +1,10 @@
----
-- name: "Create {{ rcc_install_path }}"
-  file:
-    path: "{{ rcc_install_path }}"
-    state: directory
-    mode: '0775'
-    owner: ubuntu
-    group: ubuntu
-  become: yes
-
-- name: "Ensure that /srv is writable"
-  file:
-    path: /srv
-    state: directory
-    mode: '0775'
-    owner: ubuntu
-    group: ubuntu
-  become: yes
-
-- name: Clone/Update rcc
-  git:
-    repo: 'https://github.com/epfl-si/rcc.git'
-    dest: "{{ rcc_install_path }}"
-    update: yes
-    force: yes
-
-- name: Running npm i
-  shell: |
-    cd "{{ rcc_install_path }}"
-    npm i --no-fund
-  become: yes
+- include_tasks:
+    file: deploy.yml
+    apply:
+      tags:
+        - deploy
+  tags:
+    - deploy
+    - deploy.dir
+    - deploy.clone
+    - deploy.npm

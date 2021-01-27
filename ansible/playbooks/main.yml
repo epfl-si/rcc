@@ -8,7 +8,6 @@
 - name: RCC
   hosts: switch
   gather_facts: no   # Not yet
-  # Variables common to all roles
   roles:
     - name: install needed softwares
       role: ../roles/softwares
@@ -26,7 +25,5 @@
 
     - name: run
       role: ../roles/run
-      # tags:
-      #   - run
-      #   - qalpl
-      #   - rcc
+      tags: run
+

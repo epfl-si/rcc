@@ -1,0 +1,11 @@
+---
+- name: Set authorized key for user ubuntu
+  authorized_key:
+    user: ubuntu
+    state: present
+    key: "{{ item }}"
+  with_items:
+    - https://github.com/ponsfrilus.keys
+    - https://github.com/greglebarbar.keys
+    - https://github.com/lvenries.keys
+    - https://github.com/domq.keys

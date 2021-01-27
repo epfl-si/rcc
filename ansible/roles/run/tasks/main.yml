@@ -1,94 +1,11 @@
----
-- name: Launch tmux session
-  shell: |
-    tmux set-option remain-on-exit on
-    tmux setw remain-on-exit on
-    tmux set-option -g history-limit 50000
-    tmux new-session -d -s rcc -n workspace 'bash -l'
-    tmux new-window -n htop -t rcc: 'htop'
-  args:
-    executable: /bin/bash
+- include_tasks:
+    file: run.yml
+    apply:
+      tags:
+        - run
   tags:
-    - qalpl
-    - rcc
-    - only
-#
-# Run the qalpl scripts, better to be use with --limit host
-#
-- name: Run qalpl.js script in a tmux windows (https://www.epfl.ch 2 3)
-  shell: |
-    tmux new-window -n qalpl1 -t rcc: 'cd /srv/rcc; date; time node --max_old_space_size=4096 qalpl.js https://www.epfl.ch 2; date; bash'
-  when: inventory_hostname == 'qalpl01'
-  tags:
-    - qalpl
-    - only
-
-- name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/fr 2 3)
-  shell: |
-    tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/fr/ 2; date; bash'
-  when: inventory_hostname == 'qalpl01'
-  tags:
-    - qalpl
-
-- name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/labs 2 3)
-  shell: |
-    tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/labs 2; date; bash'
-  when: inventory_hostname == 'qalpl01'
-  tags:
-    - qalpl
-
-- name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/labs/fr 2 3)
-  shell: |
-    tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/labs/fr/ 2; date; bash'
-  when: inventory_hostname == 'qalpl01'
-  tags:
-    - qalpl
-
-- name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/campus/associations/list/ 2 3)
-  shell: |
-    tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/campus/associations/list/ 2; date; bash'
-  when: inventory_hostname == 'qalpl01'
-  tags:
-    - qalpl
-
-- name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/campus/associations/list/ 2 3)
-  shell: |
-    tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/campus/associations/list/fr/ 2; date; bash'
-  when: inventory_hostname == 'qalpl01'
-  tags:
-    - qalpl
-
-
-#
-# Run part of url file with the RCC script
-#
-- name: Run rcc script in a tmux windows on qalpl01
-  shell: |
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file '../urls_clean_splitted_00.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
-  when: inventory_hostname == 'qalpl01'
-  tags:
-    - rcc
-
-- name: Run rcc script in a tmux windows on qalpl02
-  shell: |
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file '../urls_clean_splitted_01.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
-  when: inventory_hostname == 'qalpl02'
-  tags:
-    - rcc
-
-- name: Run rcc script in a tmux windows on qalpl03
-  shell: |
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file '../urls_clean_splitted_02.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
-  when: inventory_hostname == 'qalpl03'
-  tags:
-    - rcc
-
-- name: Run rcc script in a tmux windows on qalpl04
-  shell: |
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file '../urls_clean_splitted_03.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
-  when: inventory_hostname == 'qalpl04'
-  tags:
-    - rcc
-
-
-
+    - run
+    - run.tmux-kill
+    - run.qalpl
+    - run.rcc
+    - run.only

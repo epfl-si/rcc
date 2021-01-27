@@ -1,3 +1,17 @@
+/*
+  @TODO:
+    - use commander.js to have better arguments handling
+    - improve the output options (choose wich log to display)
+    - create a summary/report at the end including but not limited to
+      - longest URL
+      - times
+      - visited + collected URLs amount
+      - error list
+    - add the limit options
+    - add the ability to keep the PDF url but not visit them
+    - change cheerio to collect images and file links in addition to href
+*/
+
 const cheerio = require('cheerio')
 const rp = require('request-promise')
 const fs = require('fs')
@@ -7,12 +21,17 @@ const AsyncCachePromise = require('async-cache-promise')
 const EventEmitter = require('events').EventEmitter
 
 /* Args from command line or default values */
+const start = new Date()
+const dtPrefix = start.toISOString().replace(/T/, '_').replace(/-|:/g, '').replace(/\..+/, '')
 const args = process.argv
 const entryURL = args[2] || 'https://www.epfl.ch'
-const depth = args[3] || 2
-const concurrency = args[4] || 10
-const output_file = args[5] || 'off'
-const output_folder = './data/__out/'
+const txtURL = entryURL.replace(/:|\/|\./g,'_')
+const depth = args[3] || 1
+const concurrency = args[4] || 5
+const output_file = args[5] || `${dtPrefix}_${txtURL}_d${depth}_c${concurrency}.txt`
+const output_log = args[6] || `${dtPrefix}_${txtURL}_d${depth}_c${concurrency}_logs.json`
+const output_folder = './data/__out'
+const urlIncludes = 'www.epfl.ch'
 
 if (!fs.existsSync(output_folder)) {
   fs.mkdirSync(output_folder)
@@ -138,7 +157,6 @@ async function scrape(url, depth, opts) {
 }
 
 const run_scrape = async (entryURL, depth, callbacks) => {
-  const start = new Date()
   const observer = new EventEmitter()
 
   for (const cb in callbacks) {
@@ -151,11 +169,10 @@ const run_scrape = async (entryURL, depth, callbacks) => {
 
   await scrape(entryURL, depth, {
     keep(url) {
-      return url.includes('.epfl.ch') && !isPDF(url)
+      return url.includes(urlIncludes) && !isPDF(url)
     },
     observer,
   })
-  console.info('Execution time: %ds', (new Date() - start)/1000)
 }
 
 const pageStats = (function PageStats() {
@@ -191,7 +208,7 @@ const pageStats = (function PageStats() {
 let logStream = fs.createWriteStream(`${output_folder}/${output_file}`, { flags: 'w' })
 run_scrape(entryURL, depth, {
   onVisited(url, body, depth) {
-    console.log(`⟴ ${url} (visited at depth ${depth}) is ${body.length} characters long`)
+    console.log(`⟴  ${url} (visited at depth ${depth}) is ${body.length} characters long`)
     pageStats.success(url, body)
   },
   onNewLink(url, newLink) {
@@ -213,4 +230,11 @@ run_scrape(entryURL, depth, {
 }).then(() => {
   logStream.end()
   //console.log(pageStats.report())
+  console.info(`\n⇨ Execution time: ${(new Date() - start)/1000}`)
+  console.info(`⇨ Collected URL written: ${output_folder}/${output_file}`)
+  fs.writeFile(`${output_folder}/${output_log}`, JSON.stringify(pageStats.report(), null, 2), (err) => {
+    if (err) throw err
+    console.info(`⇨ Logs written: ${output_folder}/${output_log}`)
+  })
+
 })

@@ -7,6 +7,7 @@
       - 'tmux'
       - 'nodejs'
       - 'npm'
+      - 'silversearcher-ag'
       # For puppeteer, see https://github.com/puppeteer/puppeteer/blob/main/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix
       - 'ca-certificates'
       - 'fonts-liberation'

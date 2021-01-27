@@ -18,6 +18,7 @@
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch 2 3)
   shell: |
     tmux new-window -n qalpl1 -t rcc: 'cd /srv/rcc; date; time node --max_old_space_size=4096 qalpl.js https://www.epfl.ch 2; date; bash'
+  when: inventory_hostname == 'qalpl01'
   tags:
     - qalpl
     - only
@@ -25,30 +26,35 @@
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/fr 2 3)
   shell: |
     tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/fr/ 2; date; bash'
+  when: inventory_hostname == 'qalpl01'
   tags:
     - qalpl
 
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/labs 2 3)
   shell: |
     tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/labs 2; date; bash'
+  when: inventory_hostname == 'qalpl01'
   tags:
     - qalpl
 
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/labs/fr 2 3)
   shell: |
     tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/labs/fr/ 2; date; bash'
+  when: inventory_hostname == 'qalpl01'
   tags:
     - qalpl
 
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/campus/associations/list/ 2 3)
   shell: |
     tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/campus/associations/list/ 2; date; bash'
+  when: inventory_hostname == 'qalpl01'
   tags:
     - qalpl
 
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/campus/associations/list/ 2 3)
   shell: |
     tmux new-window -n qalpl2 -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/campus/associations/list/fr/ 2; date; bash'
+  when: inventory_hostname == 'qalpl01'
   tags:
     - qalpl
 

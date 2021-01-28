@@ -8,6 +8,7 @@
     - run.tmux-kill
     - run.qalpl
     - run.rcc
+    - run.only
 
 - name: Launch tmux session
   shell: |
@@ -31,7 +32,7 @@
   when: inventory_hostname == 'qalpl01'
   tags:
     - run.qalpl
-    - run.only
+    #- run.only
 
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/fr 2 3)
   shell: |
@@ -39,6 +40,7 @@
   when: inventory_hostname == 'qalpl02'
   tags:
     - run.qalpl
+    - run.only
 
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/labs 2 3)
   shell: |

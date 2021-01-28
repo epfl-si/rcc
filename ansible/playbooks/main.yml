@@ -7,7 +7,7 @@
 
 - name: RCC
   hosts: switch
-  gather_facts: no   # Not yet
+  gather_facts: yes
   roles:
     - name: install needed softwares
       role: ../roles/softwares

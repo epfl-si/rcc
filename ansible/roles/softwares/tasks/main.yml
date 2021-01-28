@@ -7,3 +7,12 @@
     - softs
     - softs.install
     - softs.config
+
+- include_tasks:
+    file: swap.yml
+    apply:
+      tags:
+        - swap
+  tags:
+    - swap
+

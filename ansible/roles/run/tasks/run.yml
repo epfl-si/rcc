@@ -6,6 +6,8 @@
     executable: /bin/bash
   tags:
     - run.tmux-kill
+    - run.qalpl
+    - run.rcc
 
 - name: Launch tmux session
   shell: |
@@ -22,46 +24,47 @@
 #
 # Run the qalpl scripts, better to be use with --limit host
 #
-# - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch 2 3)
-#   shell: |
-#     tmux new-window -n www -t rcc: 'cd /srv/rcc; date; time node --max_old_space_size=4096 qalpl.js https://www.epfl.ch 2; date; bash'
-#   when: inventory_hostname == 'qalpl01'
-#   tags:
-#     - run.qalpl
-#     - run.only
+# --max_old_space_size=4096
+- name: Run qalpl.js script in a tmux windows (https://www.epfl.ch 2 3)
+  shell: |
+    tmux new-window -n www -t rcc: 'cd /srv/rcc; date; export NODE_OPTIONS="--max-old-space-size=4096"; time node qalpl.js https://www.epfl.ch 2 2; date; bash'
+  when: inventory_hostname == 'qalpl01'
+  tags:
+    - run.qalpl
+    - run.only
 
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/fr 2 3)
   shell: |
-    tmux new-window -n www_fr -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/fr/ 2; date; bash'
+    tmux new-window -n www_fr -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/fr/ 2 2; date; bash'
   when: inventory_hostname == 'qalpl02'
   tags:
     - run.qalpl
 
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/labs 2 3)
   shell: |
-    tmux new-window -n labs -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/labs 2; date; bash'
+    tmux new-window -n labs -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/labs 2 2; date; bash'
   when: inventory_hostname == 'qalpl03'
   tags:
     - run.qalpl
 
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/labs/fr 2 3)
   shell: |
-    tmux new-window -n labs_fr -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/labs/fr/ 2; date; bash'
+    tmux new-window -n labs_fr -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/labs/fr/ 2 2; date; bash'
   when: inventory_hostname == 'qalpl04'
   tags:
     - run.qalpl
 
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/campus/associations/list/ 2 3)
   shell: |
-    tmux new-window -n assoc_lst -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/campus/associations/list/ 2; date; bash'
-  when: inventory_hostname == 'qalpl01'
+    tmux new-window -n assoc_lst -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/campus/associations/list/ 2 2; date; bash'
+  when: inventory_hostname == 'qalpl0x'
   tags:
     - run.qalpl
 
 - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch/campus/associations/list/ 2 3)
   shell: |
-    tmux new-window -n assoc_lst_fr -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/campus/associations/list/fr/ 2; date; bash'
-  when: inventory_hostname == 'qalpl01'
+    tmux new-window -n assoc_lst_fr -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/campus/associations/list/fr/ 2 2; date; bash'
+  when: inventory_hostname == 'qalpl0x'
   tags:
     - run.qalpl
 

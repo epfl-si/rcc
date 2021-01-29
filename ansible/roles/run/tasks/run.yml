@@ -9,6 +9,7 @@
     - run.qalpl
     - run.rcc
     - run.only
+    - run.ruby
 
 - name: Launch tmux session
   shell: |
@@ -22,6 +23,16 @@
     - run.qalpl
     - run.rcc
     - run.only
+    - run.ruby
+
+- name: Run fetch_all_urls.rb
+  shell: |
+    tmux new-window -n ruby -t rcc: 'cd /srv/rcc; date; ruby fetch_all_urls.rb; date; bash'
+  when: inventory_hostname == 'qalpl02'
+  tags:
+    - run.qalpl
+    - run.ruby
+
 #
 # Run the qalpl scripts, better to be use with --limit host
 #

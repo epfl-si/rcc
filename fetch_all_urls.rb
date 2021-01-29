@@ -34,12 +34,25 @@ else
 	cache={}
 end
 
+part_my=1
+parts_tot=1
+if ARGV.count > 0
+	part_my=ARGV[0].to_i
+	if ARGV.count > 1
+		parts_tot=ARGV[1].to_i
+	else
+		parts_tot=4
+	end
+end
+
 sites = cache['sites']
 unless sites
 	puts "Reading sites from wp-veritas"
 	wpsites = HTTParty.get("https://wp-veritas.epfl.ch/api/v1/sites")
 	sites = JSON.parse(wpsites.body).map{|s| s['url']}.select{ |l| l=~/^https:\/\/www.epfl.ch/ }
-	cache['sites'] = sites
+	if parts_tot>1
+		sites = sites.each_slice(sites.count/parts_tot).to_a[part-1]
+	end
 end
 
 urlfile=File.open("urls.txt", 'a+')

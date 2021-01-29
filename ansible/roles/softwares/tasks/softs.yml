@@ -59,13 +59,16 @@
     line: "{{ item }}"
   with_items:
     - export GEM_HOME=/home/ubuntu/.ruby/
-    - export PATH="$PATH:/home/ubuntu/.ruby/bin"
+    - export PATH="$PATH:/home/ubuntu/.gem/ruby/2.7.0/bin"
   tags:
     - softs.ruby
 
 - name: "Install gem dependancies"
   shell: |
-    gem install httparty
+    gem install --user-install httparty
+    gem install --user-install multi_xml
+    gem install --user-install mime-types
+    gem install --user-install mime-types-data
   args:
     executable: /bin/bash
   tags:

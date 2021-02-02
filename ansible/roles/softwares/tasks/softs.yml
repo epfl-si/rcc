@@ -65,10 +65,10 @@
 
 - name: "Install gem dependancies"
   shell: |
-    gem install --user-install httparty
     gem install --user-install multi_xml
     gem install --user-install mime-types
     gem install --user-install mime-types-data
+    gem install --user-install httparty
   args:
     executable: /bin/bash
   tags:

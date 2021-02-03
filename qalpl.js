@@ -18,6 +18,7 @@ const fs = require('fs')
 const axios = require('axios')
 const URL = require('url')
 const AsyncCachePromise = require('async-cache-promise')
+const { BitSet } = require('bitset')
 const EventEmitter = require('events').EventEmitter
 
 /* Args from command line or default values */
@@ -26,8 +27,8 @@ const dtPrefix = start.toISOString().replace(/T/, '_').replace(/-|:/g, '').repla
 const args = process.argv
 const entryURL = args[2] || 'https://www.epfl.ch'
 const txtURL = entryURL.replace(/:|\/|\./g,'_')
-const depth = args[3] || 1
-const concurrency = args[4] || 5
+const depth = args[3] || 3
+const concurrency = args[4] || 10
 const output_file = args[5] || `${dtPrefix}_${txtURL}_d${depth}_c${concurrency}.txt`
 const output_log = args[6] || `${dtPrefix}_${txtURL}_d${depth}_c${concurrency}_logs.json`
 const output_folder = './data/__out'
@@ -35,6 +36,33 @@ const urlIncludes = 'www.epfl.ch'
 
 if (!fs.existsSync(output_folder)) {
   fs.mkdirSync(output_folder)
+}
+
+
+class MySet {
+  constructor() {
+    this._bitset = new BitSet()
+  }
+
+  static _known = {}
+  static _nextId = 1
+
+  add(something) {
+    if (! MySet._known[something]) {
+      MySet._known[something] = MySet._nextId++
+    }
+    // After this point, MySet._known[something] is a nonnegative integer
+    this._bitset.set(MySet._known[something])
+  }
+
+  toJSON() {
+    const _known_inverse = {}
+    for (let k in MySet._known) {
+      const v = MySet._known[k]
+      _known_inverse[v] = k
+    }
+    return this._bitset.toArray().map((idx) => _known_inverse[idx])
+  }
 }
 
 /**
@@ -100,14 +128,14 @@ async function getPageLinks(url, body) {
       retval.push(URL.resolve(url, href))
     })
     // collect <img>'s src
-    /* Uncomment me to collect images' links (greedy)
-    $('img').map(function (i, e) {
+    // Uncomment me to collect images' links (greedy)
+    /*$('img').map(function (i, e) {
       let img = $(e).attr('src')
       // console.log(img)
       if (!img) return
       retval.push(URL.resolve(url, img))
-    })
-    */
+    })*/
+
   }
   return retval
 }
@@ -169,7 +197,6 @@ const run_scrape = async (entryURL, depth, callbacks) => {
   const observer = new EventEmitter()
 
   for (const cb in callbacks) {
-    debugger
     let matched
     if ((matched = cb.match(/^on(.*)$/))) {
       observer.on(matched[1].toLowerCase(), callbacks[cb])
@@ -194,13 +221,13 @@ const pageStats = (function PageStats() {
   }
   function setOf(page, key) {
     const stats = statsOf(page)
-    if (!stats[key]) stats[key] = new Set()
+    if (!stats[key]) stats[key] = new MySet()
     return stats[key]
   }
   return {
     link(from, to) {
-      setOf(from, 'linksFrom').add(to)
-      setOf(to, 'linksTo').add(from)
+      setOf(from, 'linksTo').add(to)
+      setOf(to, 'linksFrom').add(from)
     },
     success(at, body) {
       statsOf(at).status = 'OK'
@@ -210,6 +237,7 @@ const pageStats = (function PageStats() {
       statsOf(at).error = error
     },
     report() {
+      debugger
       return stats
     },
   }
@@ -222,7 +250,7 @@ run_scrape(entryURL, depth, {
     pageStats.success(url, body)
   },
   onNewLink(url, newLink) {
-    console.log(` ↯ New link ${newLink} found at ${url}`)
+    //console.log(` ↯ New link ${newLink} found at ${url}`)
     logStream.write(`${newLink}\n`)
   },
   onLink(url, link) {

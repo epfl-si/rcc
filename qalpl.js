@@ -20,6 +20,7 @@ const URL = require('url')
 const AsyncCachePromise = require('async-cache-promise')
 const { BitSet } = require('bitset')
 const EventEmitter = require('events').EventEmitter
+const JsonStreamStringify = require('json-stream-stringify')
 
 /* Args from command line or default values */
 const start = new Date()
@@ -267,12 +268,11 @@ run_scrape(entryURL, depth, {
   },
 }).then(() => {
   logStream.end()
-  //console.log(pageStats.report())
   console.info(`\n⇨ Execution time: ${(new Date() - start)/1000}`)
   console.info(`⇨ Collected URL written: ${output_folder}/${output_file}`)
-  fs.writeFile(`${output_folder}/${output_log}`, JSON.stringify(pageStats.report(), null, 2), (err) => {
-    if (err) throw err
-    console.info(`⇨ Logs written: ${output_folder}/${output_log}`)
-  })
 
+  const jsonStream = new JsonStreamStringify(pageStats.report())
+  jsonStream.once('error', () => console.log('Error at path', jsonStream.stack.join('.')))
+  jsonStream.pipe(fs.createWriteStream(`${output_folder}/${output_log}`, {flags: 'w'}))
 })
+

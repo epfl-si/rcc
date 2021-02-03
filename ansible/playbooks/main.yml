@@ -9,8 +9,8 @@
   hosts: switch
   gather_facts: yes
   roles:
-    - name: install needed softwares
-      role: ../roles/softwares
+    - name: install needed software
+      role: ../roles/software
       become: yes
       tags: soft
 

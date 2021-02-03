@@ -1,5 +1,11 @@
 ---
-- name: install softwares
+
+- name: "Install node 13.x"
+  shell: |
+    curl -sL https://deb.nodesource.com/setup_13.x | bash -
+  become: yes
+
+- name: install software
   apt:
     name:
       - 'git'
@@ -47,7 +53,7 @@
       - 'lsb-release'
       - 'wget'
       - 'xdg-utils'
-    state: present
+    state: latest
     update_cache: yes
   tags:
     - softs.install

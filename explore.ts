@@ -9,7 +9,7 @@ const dataDir = 'data'
 
 const validateURL = (link: string): vURL => {
   const url = new URL(link)
-  const urlInfo = tld(url.toString())
+  const urlInfo = tld(url.toString(), {allowUnknownTLD : true})
   const trimmedDomain = urlInfo.domain.replace('.' + urlInfo.tld, '')
   const fileName = `${url.hostname}${url.pathname}`.replace(/\/+$/, '').replace(/\//g, '_')
   return {

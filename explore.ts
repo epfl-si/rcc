@@ -107,12 +107,13 @@ const visit = async (currentURL: vURL, opts: any, report: report, page: any): Pr
     return report
   }
 
+  if (!opts.quiet) console.log(`\n✓ ${href}`)
 
   try {
 
     let resp = await page.goto(href, { waitUntil: 'networkidle2', timeout: Number(opts.timeout) }) // .catch(e => void 0)
+    if (!opts.quiet) console.log(`  ↳ Status: ${resp.status()}`)
     // console.log(resp)
-    if (!opts.quiet) console.log(`\n✓ ${href} [${resp.status()}]`)
     report.total.visited++
 
     if (opts.screenshot) {

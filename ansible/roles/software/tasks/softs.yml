@@ -4,6 +4,8 @@
   shell: |
     curl -sL https://deb.nodesource.com/setup_13.x | bash -
   become: yes
+  tags:
+    - softs.install
 
 - name: install software
   apt:
@@ -55,6 +57,7 @@
       - 'xdg-utils'
     state: latest
     update_cache: yes
+    install_recommends: yes
   tags:
     - softs.install
 

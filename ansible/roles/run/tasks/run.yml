@@ -48,40 +48,40 @@
     - run.hosts
 
 #
-# Run part of url file with the RCC script
+# Run part of url file with the RCC script  urls_no_slash_splitted_
 #
 - name: Run rcc script in a tmux windows on qalpl01
   shell: |
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_splitted_00.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_splitted_01.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_splitted_02.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
+    tmux new-window -n rcc00 -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_no_slash_splitted_00.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
+    tmux new-window -n rcc01 -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_no_slash_splitted_01.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
+    tmux new-window -n rcc02 -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_no_slash_splitted_02.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
   when: inventory_hostname == 'qalpl01'
   tags:
     - run.rcc
 
 - name: Run rcc script in a tmux windows on qalpl02
   shell: |
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_splitted_03.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_splitted_04.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_splitted_05.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
+    tmux new-window -n rcc03 -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_no_slash_splitted_03.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
+    tmux new-window -n rcc04 -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_no_slash_splitted_04.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
+    tmux new-window -n rcc05 -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_no_slash_splitted_05.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
   when: inventory_hostname == 'qalpl02'
   tags:
     - run.rcc
 
 - name: Run rcc script in a tmux windows on qalpl03
   shell: |
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_splitted_06.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_splitted_07.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_splitted_08.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
+    tmux new-window -n rcc06 -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_no_slash_splitted_06.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
+    tmux new-window -n rcc07 -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_no_slash_splitted_07.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
+    tmux new-window -n rcc08 -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_no_slash_splitted_08.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
   when: inventory_hostname == 'qalpl03'
   tags:
     - run.rcc
 
 - name: Run rcc script in a tmux windows on qalpl04
   shell: |
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_splitted_09.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_splitted_10.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
-    tmux new-window -n rcc -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_splitted_11.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
+    tmux new-window -n rcc09 -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_no_slash_splitted_09.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
+    tmux new-window -n rcc10 -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_no_slash_splitted_10.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
+    tmux new-window -n rcc11 -t rcc: 'cd /srv/rcc; date; time npm start -- --file 'urls_no_slash_splitted_11.txt' --performance true --report --useragent FSD --no-screenshot; date; bash'
   when: inventory_hostname == 'qalpl04'
   tags:
     - run.rcc
@@ -131,5 +131,12 @@
 #   shell: |
 #     tmux new-window -n assoc_lst_fr -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/campus/associations/list/fr/ 2 2; date; bash'
 #   when: inventory_hostname == 'qalpl0x'
+#   tags:
+#     - run.qalpl
+
+# - name: Run qalpl.js script in a tmux windows (https://www.epfl.ch)
+#   shell: |
+#     tmux new-window -n assoc_lst_fr -t rcc: 'cd /srv/rcc; date; time node qalpl.js https://www.epfl.ch/; date; bash'
+#   when: inventory_hostname == 'qalpl04'
 #   tags:
 #     - run.qalpl

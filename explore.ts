@@ -56,7 +56,13 @@ const discover = async (filePath: string, opts: any): Promise<report> => {
     args: ['--no-sandbox', '--start-maximized', '--window-size=1200,900'], // defaut size is 800x600 and the "mobile" menu can be displayed
     defaultViewport: null,
   })
+
   const page = await browser.newPage()
+
+  if (opts.useragent) {
+    const userAgent = await page.evaluate(() => navigator.userAgent)
+    await page.setUserAgent(`${userAgent} ${opts.useragent}`)
+  }
 
   for (const href of data) {
     if (!href.startsWith('http')) {

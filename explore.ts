@@ -52,7 +52,7 @@ const discover = async (filePath: string, opts: any): Promise<report> => {
   let data = readData(filePath)
 
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
     args: ['--no-sandbox', '--start-maximized', '--window-size=1200,900'], // defaut size is 800x600 and the "mobile" menu can be displayed
     defaultViewport: null,
   })
@@ -107,7 +107,7 @@ const visit = async (currentURL: vURL, opts: any, report: report, page: any): Pr
     return report
   }
 
-  if (!opts.quiet) console.log(`\n✓ ${href}`)
+  if (!opts.quiet) console.log(`\n➤ ${href}`)
 
   try {
 
@@ -132,7 +132,7 @@ const visit = async (currentURL: vURL, opts: any, report: report, page: any): Pr
       }
     }
   } catch (e) {
-    console.error(e)
+    console.error(`  ✖ Error while visiting ${href}`) // ${e}
   }
 
   const siteT1 = performance.now()

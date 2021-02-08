@@ -12,7 +12,7 @@
   "dependencies": {
     "ansi": "^0.3.1",
     "async-cache-promise": "^2.0.2",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bitset": "^5.1.1",
     "cheerio": "^1.0.0-rc.2",
     "commander": "^6.2.1",
@@ -24,7 +24,8 @@
     "stream-transform": "^1.0.8",
     "tld": "0.0.2",
     "tld-extract": "^2.0.0",
-    "url": "^0.11.0"
+    "url": "^0.11.0",
+    "xml2js": "^0.4.23"
   },
   "devDependencies": {
     "@types/commander": "^2.12.2",

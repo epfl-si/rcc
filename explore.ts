@@ -97,17 +97,22 @@ const discover = async (filePath: string, opts: any): Promise<report> => {
 const visit = async (currentURL: vURL, opts: any, report: report, page: any): Promise<report> => {
   const siteT0 = performance.now()
   let href = currentURL.url.href
-
+  // TODO: set an option for this
+  // in our use case we want to follow the 30x redirection,
+  // so we voluntarily trim the last / of the URL
+  href = href.replace(/\/$/, "")
   if (typeof opts.limit !== 'undefined' && opts.limit !== currentURL.info.domain) {
     if (!opts.quiet) console.log(`\n✖ ${href} excluded from defined limit: "${opts.limit}" (${currentURL.info.domain})`)
     report.total.excluded++
     return report
   }
 
-  if (!opts.quiet) console.log(`\n✓ ${href}`)
 
   try {
-    await page.goto(currentURL.url.href, { waitUntil: 'networkidle2', timeout: Number(opts.timeout) }) // .catch(e => void 0)
+
+    let resp = await page.goto(href, { waitUntil: 'networkidle2', timeout: Number(opts.timeout) }) // .catch(e => void 0)
+    // console.log(resp)
+    if (!opts.quiet) console.log(`\n✓ ${href} [${resp.status()}]`)
     report.total.visited++
 
     if (opts.screenshot) {

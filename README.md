@@ -188,6 +188,7 @@ this is how we plan to use them:
     - `err.log` in which you will find the site that were not able to be parsed;
     - `urls.txt` in which you will find all the collected URLs.
    The `urls.txt` file contains about 37k URLs.
+   ![xetchy.gif](./xetchy.gif)
 2. Depending of your usecase, you may want to ensure URLs don't have a trailing
    slash, i.e. to follow and cache 301 redirects. The following code might help:
    ```bash
@@ -234,6 +235,7 @@ this is how we plan to use them:
     Min: 1.33s for https://www.epfl.ch/the/fastest/link
     ---------------------------------------
     ```
+    ![rcc_discover.gif](./rcc_discover.gif)
 
 ## Notes on Cloudflare and Varnish
 [WIP]

@@ -118,6 +118,7 @@ const visit = async (currentURL: vURL, opts: any, report: report, page: any): Pr
 
     let resp = await page.goto(href, { waitUntil: 'networkidle2', timeout: Number(opts.timeout) }) // .catch(e => void 0)
     if (!opts.quiet) console.log(`  ↳ Status: ${resp.status()}`)
+    if (!opts.quiet) console.log(`  ↳ Dimension: ${opts.dimension}`)
     // console.log(resp)
     report.total.visited++
 

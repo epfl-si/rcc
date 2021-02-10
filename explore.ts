@@ -57,7 +57,7 @@ const discover = async (filePath: string, opts: any): Promise<report> => {
   let data = readData(filePath)
 
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     args: ['--no-sandbox', '--start-maximized', `--window-size=${opts.dimension}`], // defaut size is 800x600 and the "mobile" menu can be displayed
     defaultViewport: null,
   })

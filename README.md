@@ -15,8 +15,13 @@
   * [split.sh](#splitsh)
 * [Ansible](#ansible)
 * [How To](#how-to)
-  * [Without ansible](#without-ansible)
+  * [Without Ansible](#without-ansible)
+  * [With Ansible](#with-ansible)
 * [Notes on Cloudflare and Varnish](#notes-on-cloudflare-and-varnish)
+  * [Cloudflare](#cloudflare)
+  * [Varnish](#varnish)
+  * [Cache Apache 301 redirects](#cache-apache-301-redirects)
+* [Last tip](#last-tip)
 <!-- /TOC -->
 
 ## About
@@ -182,7 +187,8 @@ short: I don't kown. These are pretty specific to our usage and while you should
 be able to adapt them to your usage, you'll need to dive into the code. However,
 this is how we plan to use them:
 
-### Without ansible
+
+### Without Ansible
 
 1. First we need to collect all URL. For that, run `node xetchy.js`. It takes
    around 5 minutes and will generate 2 files:
@@ -238,6 +244,76 @@ this is how we plan to use them:
     ```
     ![rcc_discover.gif](./rcc_discover.gif)
 
+
+### With Ansible
+
+To set up the remote machine use :
+  1. `./ansible/rccsible -t soft` to install the needed sotfware,
+  2. `./ansible/rccsible -t access` to ensure SSH access
+  3. `./ansible/rccsible -t deploy` to deploy this repo (i.e. `git clone` and `npm i`)
+
+The tag `run.hosts` ensure that the `/etc/hosts` is set to bypass cloudflare.
+
+1. `./ansible/rccsible -t deploy,run.hosts,run.xetchy`
+2. `./ansible/rccsible -t run.split`
+3. Your can check that every `urls.txt` file have the same number of line: `./ansible/rccsible all -m raw -a "cd /srv/rcc; cat urls.txt | wc -l"`
+4. `./ansible/rccsible -t run.rcc` to visit all URLs with pupetteer.
+
+
 ## Notes on Cloudflare and Varnish
-[WIP]
+
+Cache-Control headers (https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cache-Control)
+are used to instruct browsers and cache system how to manage the cache.
+
+Please note that these headers can be sent by the application (e.g. WordPress),
+the web server (e.g. Apache), or the proxy (e.g. Varnish). Certains request can
+bypasse the application and be handled directly by the web server (e.g. requests
+on images or documents).
+
+Additionaly, each type of documents or redirections may have different
+Cache-Control headers.
+
+
+### Cloudflare
+
+CloudFlare has some feature to handle the cache. You can look at the
+[always online](https://www.cloudflare.com/always-online/) feature. The setting
+that control edge servers behavior ([Edge Cache Expire TTL](https://blog.cloudflare.com/edge-cache-expire-ttl-easiest-way-to-override/)) worth to be looked into.
+
+Reading [Understand Cloudflare's default cache behavior](https://support.cloudflare.com/hc/en-us/articles/200172516-Understanding-Cloudflare-s-CDN) surely helps too.
+
+[Understand Cloudflare cache responses](https://support.cloudflare.com/hc/en-us/articles/200172516-Understanding-Cloudflare-s-CDN#h_bd959d6a-39c0-4786-9bcd-6e6504dcdb97)
+aka `CF-Cache-Status` can be interesting.
+
+
+### Varnish
+
+Documentation like [Serve stale content while the backend is offline ](https://www.section.io/docs/modules/varnish-cache/how-tos/configure-varnish-cache-to-serve-content-while-the-backend-is-offline/)
+helps us a lot.
+
+Observing the `varishstat` with
+`varnishstat -n /var/lib/varnish/varnishd -1 -f SMF.s0.g_bytes -f SMF.s0.g_space -f MAIN.vsm_free -f MAIN.vsm_used -f MAIN.n_lru_nuked -f MAIN.n_object -f MAIN.cache_hit -f MAIN.cache_miss`
+can help to understand things.
+
+
+### Cache Apache 301 redirects
+
+See https://httpd.apache.org/docs/current/mod/mod_headers.html, and § "Append a
+Caching header for responses with a HTTP status code of 200" for expression.
+
+Thanks to https://serverfault.com/a/185191/373021 we found that we were missing
+the `always` parameter.
+
+```
+Header always set Cache-Control "max-age=129600, public" "expr=%{REQUEST_STATUS} == 301"
+```
+
+
+## Last tip
+
+Having a copy of your home page (i.e. `wget -mkEpnp`) that can be served on
+another server in case things get out of hand and knowing how to redirect
+traffic on it would be the best advice here.
+
+> One wise man once said, sometimes it's better to wear belts and suspenders.
 

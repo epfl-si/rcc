@@ -10,5 +10,6 @@
     - run.rcc
     - run.only
     - run.ruby
+    - run.xetchy
     - run.split
     - run.hosts

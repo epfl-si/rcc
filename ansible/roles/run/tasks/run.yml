@@ -29,6 +29,15 @@
     - run.ruby
     - run.split
 
+- name: Force varnish reload
+  lineinfile:
+    path: "/etc/hosts"
+    state: present
+    line: "128.178.222.83 www.epfl.ch"
+    become: yes
+    tags:
+      - run.hosts
+
 # - name: Run fetch_all_urls.rb
 #   shell: |
 #     tmux new-window -n ruby -t rcc: 'cd /srv/rcc; date; rm urls.txt; ruby fetch_all_urls.rb; date; bash'
@@ -37,7 +46,7 @@
 
 - name: Run xetchy
   shell: |
-    tmux new-window -n xetchy -t rcc: 'cd /srv/rcc; date; rm urls.txt; node xetchy.js; date; cat urls.txt | sort -u > urls_unq.txt; mv urls_unq.txt urls.txt; bash'
+    tmux new-window -n xetchy -t rcc: 'cd /srv/rcc; date; rm urls.txt; node xetchy.js; date; cat urls_luc.txt >> urls.txt; cat urls.txt | sort -u > urls_unq.txt; mv urls_unq.txt urls.txt; bash'
   tags:
     - run.xetchy
 
@@ -47,17 +56,15 @@
   tags:
     - run.split
 
-- name: Force varnish reload
-  lineinfile:
-    path: "/etc/hosts"
-    state: present
-    line: "128.178.222.83 www.epfl.ch"
-  become: yes
-  tags:
-    - run.hosts
 
 #
-# Run part of url file with the RCC script  urls_no_slash_splitted_
+# Run part of url file with the RCC script
+# Viewport:
+#   - 500,300
+#   - 700,500
+#   - 800,600
+#   - 1000,800
+#   - 1300,1000
 #
 - name: Run rcc script in a tmux windows on qalpl01
   shell: |

@@ -151,7 +151,7 @@ specified.
 
 #### With an starting file
 
-`npm start -- --file './data/__out/urls.txt' --performance true --report --useragent FSD`
+`npm start -- --file './urls.txt' --performance true --report --useragent FSD`
 
 This means that it will takes all URLs from the `urls.txt` file (one URL per
 line), display some performance information (`--performance`), generate a basic
@@ -163,6 +163,8 @@ report (`--report`) and add a suffix to the user agent string (`--useragent`).
 A bash script that can [split](https://www.gnu.org/software/coreutils/manual/html_node/split-invocation.html)
 a file in "n" chunks. Used on `urls.txt` to distribute the input on different
 server.
+
+Example: `./split.sh urls.txt 12`
 
 
 ## Ansible
@@ -254,10 +256,11 @@ To set up the remote machine use :
 
 The tag `run.hosts` ensure that the `/etc/hosts` is set to bypass cloudflare.
 
-1. `./ansible/rccsible -t deploy,run.hosts,run.xetchy`
-2. `./ansible/rccsible -t run.split`
-3. Your can check that every `urls.txt` file have the same number of line: `./ansible/rccsible all -m raw -a "cd /srv/rcc; cat urls.txt | wc -l"`
-4. `./ansible/rccsible -t run.rcc` to visit all URLs with pupetteer.
+  1. `./ansible/rccsible -t deploy,run.hosts,run.xetchy`
+  2. `./ansible/rccsible -t run.split`
+  3. Your can check that every `urls.txt` file have the same number of line:
+     `./ansible/rccsible all -m raw -a "cd /srv/rcc; cat urls.txt | wc -l"`
+  4. `./ansible/rccsible -t run.rcc` to visit all URLs with puppeteer.
 
 
 ## Notes on Cloudflare and Varnish

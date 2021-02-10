@@ -120,18 +120,19 @@ file.
 
 #### Options
 
-| arg   | full                      | description                     | default  |
-| ----- | ------------------------- | ------------------------------- | -------- |
-| `-f`  | `--file <file>`           | `file` containing urls list     | required |
-| `-l`  | `--limit <domain>`        | limit to a specific domain      | false    |
-| `-ns` | `--no-screenshot`         | save screenshot of visited site | false    |
-| `-o`  | `--dump-options`          | dump run time options           | false    |
-| `-p`  | `--performance`           | show performance data           | true     |
-| `-q`  | `--quiet`                 | limit ouptut console            | false    |
-| `-r`  | `--report`                | output final report             | false    |
-| `-t`  | `--timeout <timeout>`     | set timeout in milliseconds     | 30000    |
-| `-u`  | `--url <url>`             | `url` to start with             | required |
-| `-ua` | `--useragent <useragent>` | set useragent                   | idev-fsd |
+| arg   | full                      | description                     | default     |
+| ----- | ------------------------- | ------------------------------- | ----------- |
+| `-d`  | `--dimension <dimension>` | dimension of screen             | '1300,1000' |
+| `-f`  | `--file <file>`           | `file` containing urls list     | required    |
+| `-l`  | `--limit <domain>`        | limit to a specific domain      | false       |
+| `-ns` | `--no-screenshot`         | save screenshot of visited site | false       |
+| `-o`  | `--dump-options`          | dump run time options           | false       |
+| `-p`  | `--performance`           | show performance data           | true        |
+| `-q`  | `--quiet`                 | limit ouptut console            | false       |
+| `-r`  | `--report`                | output final report             | false       |
+| `-t`  | `--timeout <timeout>`     | set timeout in milliseconds     | 30000       |
+| `-u`  | `--url <url>`             | `url` to start with             | required    |
+| `-ua` | `--useragent <useragent>` | set useragent                   | idev-fsd    |
 
 #### With an starting URL
 

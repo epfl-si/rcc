@@ -53,7 +53,7 @@ const discover = async (filePath: string, opts: any): Promise<report> => {
 
   const browser = await puppeteer.launch({
     headless: false,
-    args: ['--no-sandbox', '--start-maximized', '--window-size=1200,900'], // defaut size is 800x600 and the "mobile" menu can be displayed
+    args: ['--no-sandbox', '--start-maximized', `--window-size=${opts.dimension}`], // defaut size is 800x600 and the "mobile" menu can be displayed
     defaultViewport: null,
   })
 
@@ -158,7 +158,8 @@ const visit = async (currentURL: vURL, opts: any, report: report, page: any): Pr
   return report
 }
 
-const explore = async (link: string, opts: any): Promise<report> => {
+const explore = async (link: string, opts: any ): Promise<report> => {
+  
   const t0 = performance.now()
 
   const url = validateURL(link)
@@ -167,7 +168,7 @@ const explore = async (link: string, opts: any): Promise<report> => {
 
   const browser = await puppeteer.launch({
     headless: true,
-    args: ['--no-sandbox', '--start-maximized', '--window-size=1200,900'], // defaut size is 800x600 and the "mobile" menu can be displayed
+    args: ['--no-sandbox', '--start-maximized', `--window-size=${opts.dimension}`], // defaut size is 800x600 and the "mobile" menu can be displayed
     defaultViewport: null,
   })
   const page = await browser.newPage()

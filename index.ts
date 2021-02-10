@@ -40,6 +40,7 @@ lecommander
   .name('npm start -- ')
   .usage('--url https://www.epfl.ch --limit epfl.ch -d -r -ns')
   .description('An application that screenshot all pages from a starting URL')
+  .option('-d, --dimension <dimension>', 'set dimension', '1300,1000')
   .option('-f, --file <file>', '`file` containing urls to visit')
   .option('-l, --limit <domain>', 'limit to a specific domain')
   .option('-ns, --no-screenshot', 'save screenshot of visited site')
